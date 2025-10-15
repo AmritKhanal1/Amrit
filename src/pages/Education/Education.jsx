@@ -15,24 +15,22 @@ const EducationSection = () => {
 
   const educationData = [
     {
-      degree: "Secondary School Certificate (SSC)",
-      school: "Natore Textile Institute",
-      mascot: "📘",
-      year: "2019-2021",
-      achievements: ["GPA: 4.89", "Subject: Science"],
-      skills: ["Mathematics", "Physics", "Chemistry", "Biology"],
-      description:
-        "Focused on core science subjects with emphasis on practical laboratory work and scientific research methodologies.",
+      degree: "Bachelor in Computer Engineering",
+      school: "ACME Engineering College",
+      mascot: "💻",
+      year: "2024 - Present",
+      achievements: ["Currently Pursuing", "Computer Engineering Major"],
+      skills: ["Programming", "Problem-Solving", "Modern Technologies"],
+      description: "Currently pursuing a bachelor's degree focused on computer engineering, learning programming, problem-solving, and modern technologies to build a strong foundation in the tech field.",
     },
     {
-      degree: "Higher Secondary Certificate (HSC)",
-      school: "Dottopara Model Degree College",
-      mascot: "📗",
-      year: "2021-2023",
-      achievements: ["GPA: 4.25", "Subject: Arts"],
-      skills: ["Literature", "Social Studies", "Economics", "History"],
-      description:
-        "Developed strong analytical and critical thinking skills through comprehensive study of humanities and social sciences.",
+      degree: "High School – Computer Science",
+      school: "Shikshadeep College",
+      mascot: "📚",
+      year: "Completed",
+      achievements: ["Computer Science Stream", "Core Technology Fundamentals"],
+      skills: ["Coding", "Logic", "Technology Fundamentals"],
+      description: "Completed higher secondary education in the computer science stream, gaining core knowledge in coding, logic, and technology fundamentals.",
     },
   ];
 
@@ -78,8 +76,7 @@ const EducationSection = () => {
             Educational Journey
           </h2>
           <p className="text-gray-300 max-w-2xl mx-auto text-lg">
-            Discover how academic excellence shapes innovative thinking and
-            professional growth.
+            My academic path in computer science and engineering, building the foundation for my tech career.
           </p>
         </motion.div>
 
@@ -126,7 +123,7 @@ const EducationSection = () => {
                 <div className="space-y-3">
                   <h4 className="text-sm font-semibold text-white flex items-center gap-2">
                     <Trophy className="w-4 h-4 text-yellow-500" />
-                    Key Achievements
+                    Key Focus Areas
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {edu.achievements.map((achievement, i) => (

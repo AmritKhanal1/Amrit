@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Viewer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- General Reset and Typography --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        /* --- Grid Layout Container --- */
+        #app-layout {
+            height: 100vh;
+            display: grid;
+            grid-template-rows: 60px 1fr 40px;
+            grid-template-columns: 280px 1fr;
+            grid-template-areas: 
+                "header header"
+                "sidebar main-viewer"
+                "footer footer";
+        }
+
+        header {
+            grid-area: header;
+            background-color: #007bff;
+            color: white;
+            padding: 0 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 { margin: 0; font-size: 1.4em; font-weight: 700; }
+
+        #sidebar {
+            grid-area: sidebar;
+            background-color: #ffffff;
+            padding: 20px;
+            border-right: 1px solid #e9ecef;
+            overflow-y: auto;
+            box-shadow: 1px 0 5px rgba(0, 0, 0, 0.05);
+        }
+        .sidebar-module { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #f0f2f5; }
+        .sidebar-module h3 { color: #007bff; font-size: 1.1em; margin: 0 0 15px; font-weight: 700; border-left: 4px solid #ffc107; padding-left: 8px; }
+        .tool-group { display: flex; flex-direction: column; gap: 8px; }
+        .tool-button { display: flex; align-items: center; padding: 10px 12px; background-color: #f8f9fa; color: #495057; border: 1px solid #dee2e6; border-radius: 4px; text-align: left; cursor: pointer; transition: all 0.2s; font-weight: 500; }
+        .tool-button:hover { background-color: #e9ecef; border-color: #007bff; color: #007bff; }
+        .tool-button span { margin-right: 10px; font-size: 1.2em; }
+
+        #main-viewer { grid-area: main-viewer; padding: 20px; display: flex; flex-direction: column; overflow: hidden; }
+        #pdf-viewer-container { flex-grow: 1; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; background-color: #ffffff; }
+        #pdfViewer { width: 100%; height: 100%; border: none; }
+
+        footer {
+            grid-area: footer;
+            background-color: #28a745;
+            color: white;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+            font-weight: 400;
+        }
+
+        /* --- Responsive Fixes for Mobile --- */
+        @media (max-width: 768px) {
+            #app-layout { grid-template-columns: 1fr; grid-template-rows: 60px 1fr 40px; grid-template-areas: "header" "main-viewer" "footer"; }
+            #sidebar { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div id="app-layout">
+    <header>
+        <h1>📘 ShikshaFlow Document Viewer</h1>
+    </header>
+
+    <div id="sidebar">
+        <div class="sidebar-module">
+            <h3>Document Info</h3>
+            <p id="doc-title-display" style="font-weight: 700;">Loading Document...</p>
+        </div>
+        <div class="sidebar-module">
+            <h3>Viewer Tools (Non-Functional)</h3>
+            <div class="tool-group">
+                <button class="tool-button"><span>🔍</span> Zoom In</button>
+                <button class="tool-button"><span>🔎</span> Zoom Out</button>
+                <button class="tool-button"><span>🔄</span> Rotate Page</button>
+            </div>
+        </div>
+        <div class="sidebar-module">
+            <h3>Navigation (Non-Functional)</h3>
+            <div class="tool-group">
+                <button class="tool-button"><span>📄</span> Go to Page 1</button>
+                <button class="tool-button"><span>📌</span> Go to Bookmark</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-viewer">
+        <div id="pdf-viewer-container">
+            <iframe id="pdfViewer" title="PDF Content"></iframe>
+        </div>
+    </div>
+
+    <footer>
+        <span id="load-status">Ready for document.</span>
+        <span>© 2026 ShikshaFlow | Designed by Amrit</span>
+    </footer>
+</div>
+
+<script>
+    const pdfViewer = document.getElementById('pdfViewer');
+    const pdfContainer = document.getElementById('pdf-viewer-container');
+    const docTitleDisplay = document.getElementById('doc-title-display');
+    const loadStatus = document.getElementById('load-status');
+
+    function loadPDF() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const file = urlParams.get('file');
+
+        if (!file) {
+            pdfContainer.innerHTML = "<h3 style='text-align:center; padding:50px; color:#dc3545;'>❌ Error: No PDF file specified.</h3>";
+            docTitleDisplay.textContent = 'N/A';
+            loadStatus.textContent = 'Configuration Error';
+            return;
+        }
+
+        const fileName = file.substring(file.lastIndexOf('/') + 1) || file;
+        docTitleDisplay.textContent = fileName.length > 30 ? fileName.substring(0,27)+'...' : fileName;
+
+        // Detect mobile devices
+        const isMobile = window.innerWidth < 768;
+
+        if (isMobile) {
+            // Open PDF in new tab for mobile
+            window.open(file, '_blank');
+            pdfContainer.innerHTML = "<h3 style='text-align:center; padding:50px;'>📄 PDF opened in new tab for mobile viewing.</h3>";
+            loadStatus.textContent = 'PDF opened in new tab';
+        } else {
+            // Desktop: load in iframe
+            pdfViewer.src = file;
+            loadStatus.textContent = 'Loading Document...';
+            pdfViewer.onload = () => loadStatus.textContent = 'Document Loaded Successfully';
+            pdfViewer.onerror = () => loadStatus.textContent = 'Error: Failed to load document!';
+        }
+    }
+
+    loadPDF();
+</script>
+</body>
+</html>

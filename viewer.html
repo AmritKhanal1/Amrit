@@ -16,11 +16,12 @@
             color: #212529;
         }
 
-        /* --- Grid Layout Container --- */
+        /* --- Grid Layout Container (Default/Desktop) --- */
         #app-layout {
             height: 100vh;
             display: grid;
-            grid-template-rows: 60px 1fr 40px;
+            /* Default: Sidebar (280px) and Main Viewer (1fr) */
+            grid-template-rows: 60px 1fr 40px; 
             grid-template-columns: 280px 1fr;
             grid-template-areas: 
                 "header header"
@@ -48,12 +49,10 @@
             overflow-y: auto;
             box-shadow: 1px 0 5px rgba(0, 0, 0, 0.05);
         }
+        /* Adjusted styles since tool-group and tool-button are removed */
         .sidebar-module { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #f0f2f5; }
+        .sidebar-module:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
         .sidebar-module h3 { color: #007bff; font-size: 1.1em; margin: 0 0 15px; font-weight: 700; border-left: 4px solid #ffc107; padding-left: 8px; }
-        .tool-group { display: flex; flex-direction: column; gap: 8px; }
-        .tool-button { display: flex; align-items: center; padding: 10px 12px; background-color: #f8f9fa; color: #495057; border: 1px solid #dee2e6; border-radius: 4px; text-align: left; cursor: pointer; transition: all 0.2s; font-weight: 500; }
-        .tool-button:hover { background-color: #e9ecef; border-color: #007bff; color: #007bff; }
-        .tool-button span { margin-right: 10px; font-size: 1.2em; }
 
         #main-viewer { grid-area: main-viewer; padding: 20px; display: flex; flex-direction: column; overflow: hidden; }
         #pdf-viewer-container { flex-grow: 1; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; background-color: #ffffff; }
@@ -71,10 +70,27 @@
             font-weight: 400;
         }
 
-        /* --- Responsive Fixes for Mobile --- */
+        /* --- Responsive Fixes for Mobile (Stack Layout) --- */
         @media (max-width: 768px) {
-            #app-layout { grid-template-columns: 1fr; grid-template-rows: 60px 1fr 40px; grid-template-areas: "header" "main-viewer" "footer"; }
-            #sidebar { display: none; }
+            #app-layout { 
+                grid-template-columns: 1fr; 
+                grid-template-rows: 60px auto 1fr 40px; 
+                grid-template-areas: "header" "sidebar" "main-viewer" "footer"; 
+            }
+            #sidebar {
+                border-right: none; 
+                border-bottom: 1px solid #e9ecef;
+                padding-bottom: 0; 
+                max-height: 250px; 
+                overflow-y: auto; 
+            }
+            #main-viewer {
+                padding: 10px; 
+                overflow-y: auto; 
+            }
+            #pdf-viewer-container {
+                height: 100%; 
+            }
         }
     </style>
 </head>
@@ -89,22 +105,7 @@
             <h3>Document Info</h3>
             <p id="doc-title-display" style="font-weight: 700;">Loading Document...</p>
         </div>
-        <div class="sidebar-module">
-            <h3>Viewer Tools (Non-Functional)</h3>
-            <div class="tool-group">
-                <button class="tool-button"><span>🔍</span> Zoom In</button>
-                <button class="tool-button"><span>🔎</span> Zoom Out</button>
-                <button class="tool-button"><span>🔄</span> Rotate Page</button>
-            </div>
         </div>
-        <div class="sidebar-module">
-            <h3>Navigation (Non-Functional)</h3>
-            <div class="tool-group">
-                <button class="tool-button"><span>📄</span> Go to Page 1</button>
-                <button class="tool-button"><span>📌</span> Go to Bookmark</button>
-            </div>
-        </div>
-    </div>
 
     <div id="main-viewer">
         <div id="pdf-viewer-container">
@@ -138,24 +139,18 @@
         const fileName = file.substring(file.lastIndexOf('/') + 1) || file;
         docTitleDisplay.textContent = fileName.length > 30 ? fileName.substring(0,27)+'...' : fileName;
 
-        // Detect mobile devices
-        const isMobile = window.innerWidth < 768;
-
-        if (isMobile) {
-            // Open PDF in new tab for mobile
-            window.open(file, '_blank');
-            pdfContainer.innerHTML = "<h3 style='text-align:center; padding:50px;'>📄 PDF opened in new tab for mobile viewing.</h3>";
-            loadStatus.textContent = 'PDF opened in new tab';
-        } else {
-            // Desktop: load in iframe
-            pdfViewer.src = file;
-            loadStatus.textContent = 'Loading Document...';
-            pdfViewer.onload = () => loadStatus.textContent = 'Document Loaded Successfully';
-            pdfViewer.onerror = () => loadStatus.textContent = 'Error: Failed to load document!';
-        }
+        pdfViewer.src = file;
+        loadStatus.textContent = 'Loading Document...';
+        
+        pdfViewer.onload = () => loadStatus.textContent = 'Document Loaded Successfully';
+        pdfViewer.onerror = () => {
+            loadStatus.textContent = 'Error: Failed to load document!';
+            pdfContainer.innerHTML = "<h3 style='text-align:center; padding:50px; color:#dc3545;'>❌ Error: Could not embed document. Try <a href='" + file + "' target='_blank'>opening in a new tab</a>.</h3>";
+        };
     }
 
     loadPDF();
 </script>
 </body>
 </html>
+

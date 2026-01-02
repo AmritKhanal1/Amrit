@@ -19,12 +19,11 @@
     <link rel="stylesheet" href="css/home.css">
 
     <style>
-        /* Fixing Problem 1: Contrast */
-        .footer { background-color: #1a1a1a; color: #ffffff; padding: 40px 0; }
-        .footer .copyright-text { color: #d1d1d1 !important; margin-bottom: 10px; }
-        .footer a { color: #5dade2 !important; text-decoration: underline; }
+        .footer { background-color: #1a1a1a; color: #ffffff; } /* Ensure dark background */
+        .footer .copyright-text { color: #e0e0e0 !important; } /* Lighten text for contrast */
+        .footer a { color: #3498db !important; text-decoration: underline; } /* Accessible link color */
         .footer a:hover { color: #ffffff !important; }
-        .sub-title { color: #666; text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 5px; }
+        .sub-title { color: #555; text-transform: uppercase; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -43,7 +42,7 @@
                 <a href="privacy.html" class="nav-link">Privacy Policy</a>
                 <a href="#contact" class="nav-link btn-contact">Contact</a>
             </nav>
-            <div class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu"><i class="fas fa-bars"></i></div>
+            <div class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></div>
         </div>
     </header>
 
@@ -51,7 +50,9 @@
         <section class="hero-section" id="home">
             <div class="container hero-content">
                 <p class="tagline-motto" data-aos="fade-up" data-aos-delay="100">Learn Smarter, Achieve Faster</p>
+
                 <h1 class="hero-title" data-aos="fade-up" data-aos-delay="200">Empowering Students with Free, High-Quality Academic Resources</h1>
+                
                 <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="400">ShikshaFlow provides meticulously curated notes, lab reports, projects, past papers, and academic books for +2 Science/Management and Engineering students from TU, PU, KU, and PoU.</p>
                 
                 <div class="cta-group" data-aos="fade-up" data-aos-delay="600">
@@ -85,8 +86,8 @@
         <section class="features-section section-padding" id="why-us">
             <div class="container">
                 <div class="section-heading text-center" data-aos="fade-down">
-                    <h2 class="main-title">Why Choose ShikshaFlow?</h2>
-                    <h3 class="sub-title">Our Core Values</h3>
+                    <h2 class="sub-title">Core Value</h2>
+                    <h3 class="main-title">Why Choose ShikshaFlow?</h3>
                 </div>
                 <div class="features-grid">
                     <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
@@ -113,33 +114,33 @@
         <section class="resource-section section-padding" id="plusTwo">
             <div class="container">
                 <div class="section-heading" data-aos="fade-right">
-                    <h2 class="main-title">📚 +2 Level Notes (Science & Management)</h2>
-                    <h3 class="sub-title">Resource Streams</h3>
+                    <h2 class="sub-title">Resource Streams</h2>
+                    <h3 class="main-title">📚 +2 Level Notes (Science & Management)</h3>
                 </div>
                 <div class="resource-grid">
                     <div class="card resource-card" data-aos="fade-up" data-aos-delay="100">
                         <div class="card-icon"><i class="fas fa-flask"></i></div>
                         <h4>Class 11 Science</h4>
                         <p>Comprehensive notes for all subjects in Grade 11 Science.</p>
-                        <a href="pages/Class11_Science/index.html" class="card-link" aria-label="View Class 11 Science Notes">View Notes <i class="fas fa-arrow-right"></i></a>
+                        <a href="pages/Class11_Science/index.html" class="card-link" aria-label="View Class 11 Science Notes">View Class 11 Science Notes <i class="fas fa-arrow-right"></i></a>
                     </div>
                     <div class="card resource-card" data-aos="fade-up" data-aos-delay="200">
                         <div class="card-icon"><i class="fas fa-atom"></i></div>
                         <h4>Class 12 Science</h4>
                         <p>In-depth study materials and syllabus for Class 12 Science.</p>
-                        <a href="pages/Class12_Science/index.html" class="card-link" aria-label="View Class 12 Science Notes">View Notes <i class="fas fa-arrow-right"></i></a>
+                        <a href="pages/Class12_Science/index.html" class="card-link" aria-label="View Class 12 Science Notes">View Class 12 Science Notes <i class="fas fa-arrow-right"></i></a>
                     </div>
                     <div class="card resource-card" data-aos="fade-up" data-aos-delay="300">
                         <div class="card-icon"><i class="fas fa-chart-line"></i></div>
                         <h4>Class 11 Management</h4>
                         <p>Notes covering core subjects for Grade 11 Management stream.</p>
-                        <a href="pages/Class11_Management/index.html" class="card-link" aria-label="View Class 11 Management Notes">View Notes <i class="fas fa-arrow-right"></i></a>
+                        <a href="pages/Class11_Management/index.html" class="card-link" aria-label="View Class 11 Management Notes">View Class 11 Management Notes <i class="fas fa-arrow-right"></i></a>
                     </div>
                     <div class="card resource-card" data-aos="fade-up" data-aos-delay="400">
                         <div class="card-icon"><i class="fas fa-business-time"></i></div>
                         <h4>Class 12 Management</h4>
                         <p>Advanced topics and resources for Class 12 Management.</p>
-                        <a href="pages/Class12_Management/index.html" class="card-link" aria-label="View Class 12 Management Notes">View Notes <i class="fas fa-arrow-right"></i></a>
+                        <a href="pages/Class12_Management/index.html" class="card-link" aria-label="View Class 12 Management Notes">View Class 12 Management Notes <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -150,8 +151,8 @@
         <section class="resource-section section-padding dark-section" id="engineering">
             <div class="container">
                 <div class="section-heading" data-aos="fade-left">
-                    <h2 class="main-title">⚙️ Engineering Bachelor Programs</h2>
-                    <h3 class="sub-title">Professional Streams</h3>
+                    <h2 class="sub-title">Professional Streams</h2>
+                    <h3 class="main-title">⚙️ Engineering Bachelor Programs</h3>
                 </div>
                 <div class="resource-grid">
                     <div class="card resource-card" data-aos="fade-up" data-aos-delay="100">
@@ -166,7 +167,7 @@
                         <p>All semesters' notes and academic materials for Civil.</p>
                         <a href="pages/Civil/index.html" class="card-link" aria-label="View Civil Engineering Notes">View Notes <i class="fas fa-arrow-right"></i></a>
                     </div>
-                </div>
+                    </div>
             </div>
         </section>
 
@@ -175,12 +176,12 @@
         <section class="about-section section-padding" id="about">
             <div class="container about-flex" data-aos="fade-up">
                 <div class="about-image-box">
-                    <img src="images/amrit.png" alt="Amrit Khanal - Creator of ShikshaFlow" width="500" height="500" loading="lazy">
+                    <img src="images/amrit.png" alt="Amrit Khanal - Creator of ShikshaFlow" width="500" height="500">
                     <div class="image-overlay"></div>
                 </div>
                 <div class="about-content">
-                    <h2 class="main-title">Hello, I'm Amrit Khanal</h2>
-                    <h3 class="sub-title">Creator & Developer</h3>
+                    <h2 class="sub-title">Creator & Developer</h2>
+                    <h3 class="main-title">Hello, I'm Amrit Khanal</h3>
                     <p>I am Amrit, an aspiring Bachelor of Computer Engineering (BCE) student with a deep interest in technology and web development.</p>
                     <a href="http://www.amritkhanal10.com.np/" target="_blank" class="btn btn-primary mt-2"><i class="fas fa-globe"></i> Visit My Main Website</a>
                 </div>
@@ -192,19 +193,19 @@
         <section class="contact-section section-padding dark-section" id="contact">
             <div class="container">
                 <div class="section-heading" data-aos="fade-down">
-                    <h2 class="main-title">📬 Connect with ShikshaFlow</h2>
-                    <h3 class="sub-title">Get in Touch</h3>
+                    <h2 class="sub-title">Get in Touch</h2>
+                    <h3 class="main-title">📬 Connect with ShikshaFlow</h3>
                 </div>
                 <div class="contact-grid">
                     <div class="card contact-card" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="https://api.whatsapp.com/send?phone=9746363722" target="_blank" aria-label="Chat on WhatsApp">
+                        <a href="https://api.whatsapp.com/send?phone=9746363722" target="_blank">
                             <i class="fab fa-whatsapp"></i>
                             <h4>Whatsapp</h4>
                             <p>+977 9746363722</p>
                         </a>
                     </div>
                     <div class="card contact-card" data-aos="zoom-in" data-aos-delay="200">
-                        <a href="mailto:me.amritkh@gmail.com" aria-label="Send an Email">
+                        <a href="mailto:me.amritkh@gmail.com">
                             <i class="fas fa-envelope"></i>
                             <h4>Email</h4>
                             <p>me.amritkh@gmail.com</p>
@@ -224,12 +225,12 @@
                 <a href="https://www.linkedin.com/" target="_blank" aria-label="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>
             </div>
             <p class="copyright-text">&copy; 2025 ShikshaFlow | All Rights Reserved. Built by Amrit Khanal.</p>
-            <a href="privacy.html" aria-label="Read our Privacy Policy">Privacy Policy</a>
+            <a href="privacy.html">Privacy Policy</a>
         </div>
     </footer>
     
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
-    <script src="js/main.js" defer></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
 

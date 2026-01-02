@@ -20,7 +20,6 @@
         #app-layout {
             height: 100vh;
             display: grid;
-            /* Default: Sidebar (280px) and Main Viewer (1fr) */
             grid-template-rows: 60px 1fr 40px; 
             grid-template-columns: 280px 1fr;
             grid-template-areas: 
@@ -55,8 +54,37 @@
         .sidebar-module h3 { color: #007bff; font-size: 1.1em; margin: 0 0 15px; font-weight: 700; border-left: 4px solid #ffc107; padding-left: 8px; }
 
         #main-viewer { grid-area: main-viewer; padding: 20px; display: flex; flex-direction: column; overflow: hidden; }
-        #pdf-viewer-container { flex-grow: 1; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; background-color: #ffffff; }
+        
+        /* Modified container to support watermark */
+        #pdf-viewer-container { 
+            position: relative; 
+            flex-grow: 1; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); 
+            border-radius: 8px; 
+            overflow: hidden; 
+            background-color: #ffffff; 
+        }
         #pdfViewer { width: 100%; height: 100%; border: none; }
+
+        /* --- NEW: Watermark Styles --- */
+        #protection-layer {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; /* Allows user to click/scroll PDF behind it */
+            z-index: 999;
+            overflow: hidden;
+            opacity: 0.3;
+        }
+        .watermark-text {
+            position: absolute;
+            font-size: 18px;
+            color: rgba(150, 150, 150, 0.4);
+            white-space: nowrap;
+            transform: rotate(-30deg);
+            user-select: none;
+            font-weight: bold;
+        }
 
         footer {
             grid-area: footer;
@@ -70,27 +98,16 @@
             font-weight: 400;
         }
 
-        /* --- Responsive Fixes for Mobile (Stack Layout) --- */
+        /* --- Responsive Fixes --- */
         @media (max-width: 768px) {
             #app-layout { 
                 grid-template-columns: 1fr; 
                 grid-template-rows: 60px auto 1fr 40px; 
                 grid-template-areas: "header" "sidebar" "main-viewer" "footer"; 
             }
-            #sidebar {
-                border-right: none; 
-                border-bottom: 1px solid #e9ecef;
-                padding-bottom: 0; 
-                max-height: 250px; 
-                overflow-y: auto; 
-            }
-            #main-viewer {
-                padding: 10px; 
-                overflow-y: auto; 
-            }
-            #pdf-viewer-container {
-                height: 100%; 
-            }
+            #sidebar { border-right: none; border-bottom: 1px solid #e9ecef; padding-bottom: 0; max-height: 250px; overflow-y: auto; }
+            #main-viewer { padding: 10px; overflow-y: auto; }
+            #pdf-viewer-container { height: 100%; }
         }
     </style>
 </head>
@@ -105,10 +122,11 @@
             <h3>Document Info</h3>
             <p id="doc-title-display" style="font-weight: 700;">Loading Document...</p>
         </div>
-        </div>
+    </div>
 
     <div id="main-viewer">
         <div id="pdf-viewer-container">
+            <div id="protection-layer"></div>
             <iframe id="pdfViewer" title="PDF Content"></iframe>
         </div>
     </div>
@@ -119,42 +137,14 @@
     </footer>
 </div>
 
-<!-- 🔥 Popup Added Here -->
-<div id="viewOnlyPopup" style="
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-">
-    <div style="
-        background: white;
-        padding: 20px 25px;
-        width: 90%;
-        max-width: 400px;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        font-family: 'Roboto', sans-serif;
-    ">
+<div id="viewOnlyPopup" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+    <div style="background: white; padding: 20px 25px; width: 90%; max-width: 400px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-family: 'Roboto', sans-serif;">
         <h3 style="margin-top:0; color:#007bff;">Important Notice</h3>
         <p style="color:#333; font-size:15px; line-height:1.4;">
             📌 Documents are only available for viewing.<br>
             Downloading, printing, or copying is not allowed.
         </p>
-        <button onclick="closePopup()" style="
-            background:#007bff;
-            color:white;
-            border:none;
-            padding:10px 20px;
-            margin-top:12px;
-            border-radius:6px;
-            cursor:pointer;
-            font-size:15px;
-        ">Got it</button>
+        <button onclick="closePopup()" style="background:#007bff; color:white; border:none; padding:10px 20px; margin-top:12px; border-radius:6px; cursor:pointer; font-size:15px;">Got it</button>
     </div>
 </div>
 
@@ -163,6 +153,34 @@
     const pdfContainer = document.getElementById('pdf-viewer-container');
     const docTitleDisplay = document.getElementById('doc-title-display');
     const loadStatus = document.getElementById('load-status');
+
+    // --- Added: Security & Watermark Logic ---
+    function initSecurity() {
+        // Create Watermarks
+        const layer = document.getElementById('protection-layer');
+        const text = "PROTECTED - SHIKSHAFLOW"; 
+        for (let i = 0; i < 25; i++) {
+            const span = document.createElement('span');
+            span.className = 'watermark-text';
+            span.innerText = text;
+            span.style.top = Math.random() * 100 + "%";
+            span.style.left = Math.random() * 100 + "%";
+            layer.appendChild(span);
+        }
+
+        // Block Right Click
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Block Print, Save, and Inspect keys
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey || e.key === "F12") {
+                if (['p', 's', 'u', 'c'].includes(e.key.toLowerCase()) || e.key === "F12") {
+                    e.preventDefault();
+                    alert("Content protection is active.");
+                }
+            }
+        });
+    }
 
     function loadPDF() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -180,7 +198,7 @@
 
         pdfViewer.src = file;
         loadStatus.textContent = 'Loading Document...';
-        
+
         pdfViewer.onload = () => loadStatus.textContent = 'Document Loaded Successfully';
         pdfViewer.onerror = () => {
             loadStatus.textContent = 'Error: Failed to load document!';
@@ -192,8 +210,9 @@
         document.getElementById("viewOnlyPopup").style.display = "none";
     }
 
+    // Initialize both
+    initSecurity();
     loadPDF();
 </script>
 </body>
 </html>
-

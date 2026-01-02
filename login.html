@@ -1,206 +1,304 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sign In / Sign Up | ShikshaFlow</title>
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sign In / Sign Up — ShikshaFlow</title>
+
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,800" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 <style>
-:root {
-    --primary-blue: #2a68c0;
-    --primary-green: #4CAF50;
-    --primary-yellow: #FFC107;
-    --background-light: #f5f7fa;
-    --text-dark: #333333;
-    --text-secondary: #6c757d;
-    --shadow-color: rgba(0,0,0,0.15);
+:root{
+  --primary-blue:#2a68c0;
+  --primary-green:#4caf50;
+  --bg:#f5f7fa;
+  --text:#333;
+  --muted:#6c757d;
+  --shadow:rgba(0,0,0,0.15);
 }
-* { box-sizing: border-box; }
-body {
-    background: var(--background-light);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: 'Montserrat', sans-serif;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Montserrat,system-ui,Arial;
+  background:var(--bg);
+  color:var(--text);
 }
-h1 { font-weight: 700; margin: 0; }
-p { margin: 10px 0; font-size:14px; }
-span { font-size:12px; color:var(--text-secondary); }
-button {
-    border-radius: 20px; border:1px solid var(--primary-blue);
-    background-color: var(--primary-blue);
-    color: white; font-weight: bold;
-    padding: 12px 45px; cursor:pointer;
-    transition: 0.3s;
+.container{
+  width:768px; max-width:100%; min-height:480px;
+  background:#fff;border-radius:10px;position:relative;overflow:hidden;
+  box-shadow:0 14px 28px var(--shadow),0 10px 10px rgba(0,0,0,0.18);
 }
-button:hover { background-color:#3b76c9; }
-button.ghost { background-color:transparent; border-color:#fff; color:#fff; }
-input { width:100%; padding:12px; margin:8px 0; border-radius:5px; border:1px solid #ccc; }
-input:focus { outline:none; border-color: var(--primary-blue); }
+.form-container{position:absolute;top:0;height:100%;transition:all .6s ease-in-out;padding:50px;text-align:center}
+.sign-in-container{left:0;width:50%;z-index:2}
+.sign-up-container{left:0;width:50%;opacity:0;z-index:1}
+.container.right-panel-active .sign-in-container{transform:translateX(100%)}
+.container.right-panel-active .sign-up-container{transform:translateX(100%);opacity:1;z-index:5}
+.overlay-container{position:absolute;top:0;left:50%;width:50%;height:100%;overflow:hidden;transition:transform .6s ease-in-out;z-index:100}
+.container.right-panel-active .overlay-container{transform:translateX(-100%)}
+.overlay{background:linear-gradient(90deg,var(--primary-green),var(--primary-blue));color:#fff;position:relative;left:-100%;height:100%;width:200%;transform:translateX(0);transition:transform .6s ease-in-out}
+.container.right-panel-active .overlay{transform:translateX(50%)}
+.overlay-panel{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 40px;top:0;height:100%;width:50%;transition:transform .6s ease-in-out}
+.overlay-left{transform:translateX(-20%)}.container.right-panel-active .overlay-left{transform:translateX(0)}
+.overlay-right{right:0;transform:translateX(0)}.container.right-panel-active .overlay-right{transform:translateX(20%)}
 
-.container { background:white; width:768px; max-width:100%; min-height:480px; border-radius:10px; position:relative; overflow:hidden; box-shadow:0 14px 28px var(--shadow-color), 0 10px 10px rgba(0,0,0,0.18);}
-.form-container { position:absolute; top:0; height:100%; transition: all 0.6s ease-in-out; padding:50px; text-align:center; }
-.sign-in-container { left:0; width:50%; z-index:2; }
-.container.right-panel-active .sign-in-container { transform: translateX(100%); }
-.sign-up-container { left:0; width:50%; opacity:0; z-index:1; }
-.container.right-panel-active .sign-up-container { transform: translateX(100%); opacity:1; z-index:5; }
-.overlay-container { position:absolute; top:0; left:50%; width:50%; height:100%; overflow:hidden; transition:0.6s; z-index:100; }
-.container.right-panel-active .overlay-container { transform: translateX(-100%); }
-.overlay { background: linear-gradient(to right, var(--primary-green), var(--primary-blue)); color:white; position:relative; left:-100%; height:100%; width:200%; transition:0.6s; }
-.container.right-panel-active .overlay { transform: translateX(50%); }
-.overlay-panel { position:absolute; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; top:0; height:100%; width:50%; transition:0.6s; padding:0 40px; }
-.overlay-left { transform: translateX(-20%); }
-.container.right-panel-active .overlay-left { transform: translateX(0); }
-.overlay-right { right:0; transform:translateX(0); }
-.container.right-panel-active .overlay-right { transform: translateX(20%); }
-
-p.error { color:red; font-size:13px; margin:5px 0; }
-p.success { color:green; font-size:13px; margin:5px 0; }
+input{width:100%;padding:12px;border-radius:6px;border:1px solid #ddd;margin:8px 0;background:#f1f3f5}
+input:focus{outline:none;border-color:var(--primary-blue);background:#fff}
+button{border-radius:20px;border:1px solid var(--primary-blue);background:var(--primary-blue);color:#fff;padding:12px 30px;font-weight:700;cursor:pointer}
+button.ghost{background:transparent;border-color:#fff;color:#fff}
+p.small{font-size:13px;color:var(--muted)}
+p.error{color:#c23b3b;font-size:13px;margin:6px 0}
+p.success{color:#118844;font-size:13px;margin:6px 0}
 
 @media(max-width:480px){
-    .container { width:95%; min-height:550px; }
-    .overlay-container { display:none; }
-    .form-container { width:100%; left:0; padding:40px 20px; position:absolute; }
+  .container{width:95%;min-height:550px}
+  .overlay-container{display:none}
+  .form-container{position:absolute;left:0;width:100%;padding:40px 20px}
+  .sign-in-container{opacity:1;z-index:2}
+  .sign-up-container{opacity:0;z-index:1}
+  .container.right-panel-active .sign-in-container{opacity:0;z-index:1}
+  .container.right-panel-active .sign-up-container{opacity:1;z-index:2}
 }
+.form-group{width:100%;margin:6px 0}
+.form-row{max-width:320px;margin:0 auto}
+.small-link{font-size:13px;color:var(--primary-blue);text-decoration:none}
+.center{display:flex;flex-direction:column;align-items:center}
 </style>
 </head>
 <body>
 
 <div class="container" id="container">
-<!-- Sign Up -->
-<div class="form-container sign-up-container">
-<h1>Create Account</h1>
-<input type="text" id="signup-name" placeholder="Name" required>
-<input type="email" id="signup-email" placeholder="Email" required>
-<input type="password" id="signup-password" placeholder="Password" required>
-<input type="password" id="signup-confirm" placeholder="Confirm Password" required>
-<button id="signup-btn">Sign Up</button>
-<p id="signup-error" class="error"></p>
-</div>
+  <!-- Sign Up -->
+  <div class="form-container sign-up-container" id="signUpForm">
+    <div class="form-row">
+      <h1>Create Account</h1>
+      <div class="form-group"><input id="signup-name" type="text" placeholder="Name" required></div>
+      <div class="form-group"><input id="signup-email" type="email" placeholder="Email" required></div>
+      <div class="form-group"><input id="signup-password" type="password" placeholder="Password" required></div>
+      <div class="form-group"><input id="signup-confirm" type="password" placeholder="Confirm Password" required></div>
+      <div class="form-group"><button id="signup-btn">Sign Up</button></div>
+      <p id="signup-error" class="error" aria-live="polite"></p>
+      <p class="small">Already have an account? <a class="small-link" id="mobileSignInLink" href="#">Sign In</a></p>
+    </div>
+  </div>
 
-<!-- Sign In -->
-<div class="form-container sign-in-container">
-<h1>Sign In</h1>
-<input type="email" id="signin-email" placeholder="Email" required>
-<input type="password" id="signin-password" placeholder="Password" required>
-<button id="signin-btn">Sign In</button>
-<p id="signin-error" class="error"></p>
-</div>
+  <!-- Sign In -->
+  <div class="form-container sign-in-container" id="signInForm">
+    <div class="form-row">
+      <h1>Sign In</h1>
+      <div class="form-group"><input id="signin-email" type="email" placeholder="Email" required></div>
+      <div class="form-group"><input id="signin-password" type="password" placeholder="Password" required></div>
+      <div class="form-group"><button id="signin-btn">Sign In</button></div>
+      <p id="signin-error" class="error" aria-live="polite"></p>
+      <p class="small">Don't have an account? <a class="small-link" id="mobileSignUpLink" href="#">Sign Up</a></p>
+    </div>
+  </div>
 
-<!-- Overlay -->
-<div class="overlay-container">
-<div class="overlay">
-<div class="overlay-panel overlay-left">
-<h1>Welcome Back!</h1>
-<p>Login with your personal info</p>
-<button class="ghost" id="signIn">Sign In</button>
-</div>
-<div class="overlay-panel overlay-right">
-<h1>Hello, Friend!</h1>
-<p>Enter your details and start journey with us</p>
-<button class="ghost" id="signUp">Sign Up</button>
-</div>
-</div>
-</div>
+  <!-- Overlay -->
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-left">
+        <h1>Welcome Back!</h1>
+        <p class="small">To keep connected with us please login with your personal info</p>
+        <button class="ghost" id="signIn">Sign In</button>
+      </div>
+      <div class="overlay-panel overlay-right">
+        <h1>Hello, Friend!</h1>
+        <p class="small">Enter your personal details and start journey with us</p>
+        <button class="ghost" id="signUp">Sign Up</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script type="module">
+/* ------------- Firebase SDK (v12.6.0) ------------- */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  setPersistence,
+  browserLocalPersistence,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-// ===== Firebase Config =====
+/* --------- Firebase config (your values) --------- */
 const firebaseConfig = {
-    apiKey: "AIzaSyBOcn0cbiBx1jfrZAG4DdAj-W63-6YJDVE",
-    authDomain: "shikshaflow-auth.firebaseapp.com",
-    projectId: "shikshaflow-auth",
-    storageBucket: "shikshaflow-auth.firebasestorage.app",
-    messagingSenderId: "730477172186",
-    appId: "1:730477172186:web:00b8d401928a89ac35dce3"
+  apiKey: "AIzaSyBOcn0cbiBx1jfrZAG4DdAj-W63-6YJDVE",
+  authDomain: "shikshaflow-auth.firebaseapp.com",
+  projectId: "shikshaflow-auth",
+  storageBucket: "shikshaflow-auth.firebasestorage.app",
+  messagingSenderId: "730477172186",
+  appId: "1:730477172186:web:00b8d401928a89ac35dce3"
 };
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// ===== DOM Elements =====
-const signUpButton = document.getElementById('signUp');
-const signInButton = document.getElementById('signIn');
-const container = document.getElementById('container');
+/* Persist session in browser */
+setPersistence(auth, browserLocalPersistence).catch(()=>{ /* ignore if not supported */ });
 
-const signupBtn = document.getElementById('signup-btn');
-const signinBtn = document.getElementById('signin-btn');
+/* ---------- DOM elements ---------- */
+const container = document.getElementById('container');
+const signUpOverlayBtn = document.getElementById('signUp'); // overlay button
+const signInOverlayBtn = document.getElementById('signIn'); // overlay button
+const mobileSignUpLink = document.getElementById('mobileSignUpLink');
+const mobileSignInLink = document.getElementById('mobileSignInLink');
 
 const signupName = document.getElementById('signup-name');
 const signupEmail = document.getElementById('signup-email');
 const signupPassword = document.getElementById('signup-password');
 const signupConfirm = document.getElementById('signup-confirm');
+const signupBtn = document.getElementById('signup-btn');
 const signupError = document.getElementById('signup-error');
 
 const signinEmail = document.getElementById('signin-email');
 const signinPassword = document.getElementById('signin-password');
+const signinBtn = document.getElementById('signin-btn');
 const signinError = document.getElementById('signin-error');
 
-// ===== Panel Toggle =====
-signUpButton.addEventListener('click', ()=> container.classList.add("right-panel-active"));
-signInButton.addEventListener('click', ()=> container.classList.remove("right-panel-active"));
+/* ---------- UI toggles ---------- */
+function openSignUp() { container.classList.add('right-panel-active'); document.title = 'Create Account'; }
+function openSignIn() { container.classList.remove('right-panel-active'); document.title = 'Sign In'; }
 
-// ===== Validation =====
-function validateEmail(email){ return email.includes('@') && /\S+@\S+\.\S+/.test(email);}
-function validatePassword(password){ return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password);}
+/* attach only when elements exist */
+if (signUpOverlayBtn) signUpOverlayBtn.addEventListener('click', openSignUp);
+if (signInOverlayBtn) signInOverlayBtn.addEventListener('click', openSignIn);
+if (mobileSignUpLink) mobileSignUpLink.addEventListener('click', e => { e.preventDefault(); openSignUp(); });
+if (mobileSignInLink) mobileSignInLink.addEventListener('click', e => { e.preventDefault(); openSignIn(); });
 
-// ===== Signup =====
+/* ---------- Helpers: validation & messages ---------- */
+function isValidEmail(email){ return typeof email === 'string' && email.includes('@') && /\S+@\S+\.\S+/.test(email); }
+function isStrongPassword(p){
+  return typeof p === 'string' && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(p);
+}
+function showSignupMessage(text,isError=true){
+  signupError.textContent = text;
+  signupError.className = isError ? 'error' : 'success';
+}
+function showSigninMessage(text,isError=true){
+  signinError.textContent = text;
+  signinError.className = isError ? 'error' : 'success';
+}
+
+/* ---------- Signup flow ---------- */
 signupBtn.addEventListener('click', async () => {
-    signupError.textContent='';
-    const name = signupName.value.trim();
-    const email = signupEmail.value.trim();
-    const password = signupPassword.value;
-    const confirm = signupConfirm.value;
+  showSignupMessage('');
+  const name = (signupName.value || '').trim();
+  const email = (signupEmail.value || '').trim();
+  const password = signupPassword.value || '';
+  const confirm = signupConfirm.value || '';
 
-    if(!name||!email||!password||!confirm){ signupError.textContent="Please fill all fields."; return;}
-    if(!validateEmail(email)){ signupError.textContent="Enter a valid email (must include @)."; return;}
-    if(!validatePassword(password)){ signupError.textContent="Password must be 8+ chars, include uppercase, lowercase, number."; return;}
-    if(password!==confirm){ signupError.textContent="Passwords do not match."; return;}
+  if (!name || !email || !password || !confirm) { showSignupMessage('Please fill all fields.'); return; }
+  if (!isValidEmail(email)) { showSignupMessage('Enter a valid email address (must include @).'); signupEmail.focus(); return; }
+  if (!isStrongPassword(password)) {
+    showSignupMessage('Password must be at least 8 characters and include uppercase, lowercase and a number.');
+    signupPassword.focus(); return;
+  }
+  if (password !== confirm) { showSignupMessage('Passwords do not match.'); signupConfirm.focus(); return; }
 
-    try{
-        const userCredential = await createUserWithEmailAndPassword(auth,email,password);
-        await sendEmailVerification(userCredential.user);
-        signupError.textContent=`Account created! Verification email sent to ${email}`;
-        signupError.className="success";
-        signupName.value=''; signupEmail.value=''; signupPassword.value=''; signupConfirm.value='';
-    }catch(error){
-        if(error.code==="auth/email-already-in-use") signupError.textContent="This email is already registered.";
-        else signupError.textContent=error.message;
-        signupError.className="error";
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    // send email verification then sign out so user must verify
+    try {
+      await sendEmailVerification(cred.user);
+    } catch (e) {
+      // if send fails, still show success but mention sending failed
+      console.error('verification send failed', e);
+      showSignupMessage('Account created but failed to send verification email. Check console.', false);
+      // sign out to be safe
+      try { await signOut(auth); } catch(_){}
+      return;
     }
+    await signOut(auth); // force sign out so user verifies before logging in
+    showSignupMessage(`Account created. Verification sent to ${email}. Check your inbox.`, false);
+    // clear fields
+    signupName.value = ''; signupEmail.value = ''; signupPassword.value = ''; signupConfirm.value = '';
+    // switch to sign-in panel for user convenience
+    openSignIn();
+  } catch (err) {
+    console.error(err.code, err.message);
+    if (err.code === 'auth/email-already-in-use') showSignupMessage('This email is already registered.');
+    else if (err.code === 'auth/invalid-email') showSignupMessage('Please enter a valid email address.');
+    else if (err.code === 'auth/weak-password') showSignupMessage('Password is too weak.');
+    else showSignupMessage('Signup failed. Try again later.');
+  }
 });
 
-// ===== Signin =====
+/* ---------- Signin flow (with resend verification helper) ---------- */
+async function handleResendVerification(user){
+  try {
+    await sendEmailVerification(user);
+    showSigninMessage(`Verification email resent to ${user.email}.`, false);
+    await signOut(auth);
+  } catch (e) {
+    console.error('resend fail', e);
+    showSigninMessage('Failed to resend verification. Try again later.');
+  }
+}
+
 signinBtn.addEventListener('click', async () => {
-    signinError.textContent='';
-    const email = signinEmail.value.trim();
-    const password = signinPassword.value;
+  showSigninMessage('');
+  const email = (signinEmail.value || '').trim();
+  const password = signinPassword.value || '';
 
-    if(!email||!password){ signinError.textContent="Please fill all fields."; return;}
-    if(!validateEmail(email)){ signinError.textContent="Enter a valid email."; return;}
+  if (!email || !password) { showSigninMessage('Please fill both email and password.'); return; }
+  if (!isValidEmail(email)) { showSigninMessage('Enter a valid email address.'); return; }
 
-    try{
-        const userCredential = await signInWithEmailAndPassword(auth,email,password);
-        const user = userCredential.user;
-        if(!user.emailVerified){ signinError.textContent="Please verify your email before login!"; return;}
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    const user = cred.user;
+    if (!user.emailVerified) {
+      // Show helpful message with quick action to resend verification
+      showSigninMessage('Email not verified. Click "Resend" to send verification email again.', true);
 
-        signinError.textContent=`Logged in as ${user.email}`;
-        signinError.className="success";
-
-        signinEmail.value=''; signinPassword.value='';
-        window.location.href="index.html"; // redirect to homepage
-    }catch(error){
-        if(error.code==="auth/user-not-found") signinError.textContent="No account found with this email.";
-        else if(error.code==="auth/wrong-password") signinError.textContent="Incorrect password.";
-        else signinError.textContent=error.message;
-        signinError.className="error";
+      // create a small "Resend" action element (only once)
+      if (!document.getElementById('resend-verif-btn')) {
+        const btn = document.createElement('button');
+        btn.id = 'resend-verif-btn';
+        btn.textContent = 'Resend Verification';
+        btn.style.marginTop = '8px';
+        btn.style.padding = '8px 14px';
+        btn.style.borderRadius = '6px';
+        btn.style.border = '1px solid var(--primary-blue)';
+        btn.style.background = 'transparent';
+        btn.style.cursor = 'pointer';
+        btn.onclick = () => handleResendVerification(user);
+        // attach below signin message
+        signinError.insertAdjacentElement('afterend', btn);
+      }
+      // sign out to prevent unverified session
+      await signOut(auth);
+      return;
     }
-});
-</script>
 
+    // Success: remove any previous resend button
+    const old = document.getElementById('resend-verif-btn');
+    if (old) old.remove();
+
+    showSigninMessage(`Logged in as ${user.email}`, false);
+    // clear fields
+    signinEmail.value = ''; signinPassword.value = '';
+    // redirect to homepage/dashboard
+    window.location.href = 'index.html'; // <- change to your homepage if needed
+  } catch (err) {
+    console.error(err.code, err.message);
+    if (err.code === 'auth/user-not-found') showSigninMessage('No account found with this email.');
+    else if (err.code === 'auth/wrong-password') showSigninMessage('Incorrect password.');
+    else if (err.code === 'auth/invalid-email') showSigninMessage('Enter a valid email address.');
+    else showSigninMessage('Login failed. Try again.');
+  }
+});
+
+/* ---------- Prevent naive form submits (if user presses Enter) ---------- */
+document.querySelectorAll('form').forEach(f => f.addEventListener('submit', e => e.preventDefault()));
+
+</script>
 </body>
 </html>

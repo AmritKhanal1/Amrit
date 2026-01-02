@@ -342,64 +342,146 @@
     </div>
 
     <script>
-        // DOM elements
-        const signUpButton = document.getElementById('signUp'); // Desktop Overlay Button
-        const signInButton = document.getElementById('signIn'); // Desktop Overlay Button
-        const container = document.getElementById('container');
-        const mobileSignUpLink = document.getElementById('mobileSignUpLink');
-        const mobileSignInLink = document.getElementById('mobileSignInLink');
-
-        function togglePanel(activateRight) {
-            if (activateRight) {
-                container.classList.add("right-panel-active");
-                document.title = "Create Account | Sign Up Form";
-            } else {
-                container.classList.remove("right-panel-active");
-                document.title = "Sign In | Login Form";
-            }
-        }
-
-        // 1. Desktop Overlay Button Handlers
-        if (signUpButton) { signUpButton.addEventListener('click', () => togglePanel(true)); }
-        if (signInButton) { signInButton.addEventListener('click', () => togglePanel(false)); }
         
-        // 2. Mobile Switch Link Handlers
-        if (mobileSignUpLink) {
-            mobileSignUpLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                togglePanel(true);
-            });
-        }
-        if (mobileSignInLink) {
-            mobileSignInLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                togglePanel(false);
-            });
-        }
+        // ======== DOM Elements ========
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // 3. Form Submission Handling (Basic Validation)
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const inputs = form.querySelectorAll('input');
-                let isValid = true;
-                
-                inputs.forEach(input => {
-                    input.style.border = 'none';
-                    if (input.hasAttribute('required') && !input.value.trim()) {
-                        isValid = false;
-                        input.style.border = '1px solid red';
-                        input.addEventListener('input', () => { input.style.border = 'none'; });
-                    }
-                });
-                
-                if (isValid) {
-                    alert(`Form submitted successfully for ${form.querySelector('h1').textContent}! (Data not actually sent)`);
-                } else {
-                    alert('Please fill in all required fields.');
-                }
-            });
-        });
+// ======== Firebase Config ========
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Buttons & containers
+const signUpButton = document.getElementById('signUp'); // Desktop Overlay
+const signInButton = document.getElementById('signIn'); // Desktop Overlay
+const container = document.getElementById('container');
+const mobileSignUpLink = document.getElementById('mobileSignUpLink');
+const mobileSignInLink = document.getElementById('mobileSignInLink');
+
+// Forms & inputs
+const signupBtn = document.getElementById('signup-btn');
+const signinBtn = document.getElementById('signin-btn');
+
+const signupName = document.getElementById('signup-name');
+const signupEmail = document.getElementById('signup-email');
+const signupPassword = document.getElementById('signup-password');
+const signupConfirm = document.createElement('input'); // We'll dynamically add confirm password field
+signupConfirm.type = "password";
+signupConfirm.placeholder = "Confirm Password";
+signupConfirm.required = true;
+signupPassword.parentNode.insertBefore(signupConfirm, signupBtn);
+
+// ======== Panel Toggle ========
+function togglePanel(activateRight) {
+    if (activateRight) {
+        container.classList.add("right-panel-active");
+        document.title = "Create Account | Sign Up Form";
+    } else {
+        container.classList.remove("right-panel-active");
+        document.title = "Sign In | Login Form";
+    }
+}
+
+if (signUpButton) signUpButton.addEventListener('click', () => togglePanel(true));
+if (signInButton) signInButton.addEventListener('click', () => togglePanel(false));
+if (mobileSignUpLink) mobileSignUpLink.addEventListener('click', e => { e.preventDefault(); togglePanel(true); });
+if (mobileSignInLink) mobileSignInLink.addEventListener('click', e => { e.preventDefault(); togglePanel(false); });
+
+// ======== Validation Helpers ========
+function validateEmail(email) {
+    return email.includes('@') && /\S+@\S+\.\S+/.test(email);
+}
+
+function validatePassword(password) {
+    // Minimum 8 chars, at least 1 uppercase, 1 lowercase, 1 number
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password);
+}
+
+// ======== Signup Handler ========
+signupBtn.addEventListener('click', async () => {
+    const name = signupName.value.trim();
+    const email = signupEmail.value.trim();
+    const password = signupPassword.value;
+    const confirm = signupConfirm.value;
+
+    // Check empty
+    if (!name || !email || !password || !confirm) {
+        alert("Please fill in all required fields.");
+        return;
+    }
+
+    // Email validation
+    if (!validateEmail(email)) {
+        alert("Please enter a valid email address (must include @).");
+        signupEmail.focus();
+        return;
+    }
+
+    // Password strength
+    if (!validatePassword(password)) {
+        alert("Password must be at least 8 characters long and include uppercase, lowercase, and a number.");
+        signupPassword.focus();
+        return;
+    }
+
+    // Confirm password
+    if (password !== confirm) {
+        alert("Passwords do not match.");
+        signupConfirm.focus();
+        return;
+    }
+
+    // Firebase signup
+    try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        alert(`Account created successfully! Welcome, ${name}`);
+        togglePanel(false); // Switch to sign-in panel
+    } catch (error) {
+        // Friendly messages
+        let msg = "Signup failed. Please try again.";
+        if (error.code === "auth/email-already-in-use") msg = "This email is already registered.";
+        else if (error.code === "auth/invalid-email") msg = "Please enter a valid email address.";
+        else if (error.code === "auth/weak-password") msg = "Password is too weak. Make it stronger.";
+        alert(msg);
+    }
+});
+
+// ======== Signin Handler ========
+signinBtn.addEventListener('click', async () => {
+    const email = document.getElementById('signin-email').value.trim();
+    const password = document.getElementById('signin-password').value;
+
+    if (!email || !password) {
+        alert("Please fill in both email and password.");
+        return;
+    }
+
+    if (!validateEmail(email)) {
+        alert("Please enter a valid email address (must include @).");
+        return;
+    }
+
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Login successful!");
+        // Redirect to homepage
+        window.location.href = "index.html"; // <-- change to your homepage URL
+    } catch (error) {
+        // Friendly messages
+        let msg = "Login failed. Please check your email and password.";
+        if (error.code === "auth/user-not-found") msg = "No account found with this email.";
+        else if (error.code === "auth/wrong-password") msg = "Incorrect password. Please try again.";
+        else if (error.code === "auth/invalid-email") msg = "Please enter a valid email address.";
+        alert(msg);
+    }
+});
     </script>
 
     </body>

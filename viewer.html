@@ -3,196 +3,526 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Viewer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>ShikshaFlow Pro Viewer</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Set worker script path
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+
     <style>
-        /* --- General Reset and Typography --- */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Roboto', sans-serif;
-            background-color: #f8f9fa;
-            color: #212529;
+        :root {
+            --bg-color: #f3f4f6;
+            --sidebar-bg: #ffffff;
+            --toolbar-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --primary: #2563eb;
+            --border: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
-        /* --- Grid Layout Container (Default/Desktop) --- */
-        #app-layout {
+        /* Dark Mode Variables */
+        [data-theme="dark"] {
+            --bg-color: #111827;
+            --sidebar-bg: #1f2937;
+            --toolbar-bg: #1f2937;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --primary: #60a5fa;
+            --border: #374151;
+        }
+
+        * { box-sizing: border-box; outline: none; }
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             height: 100vh;
-            display: grid;
-            /* Default: Sidebar (280px) and Main Viewer (1fr) */
-            grid-template-rows: 60px 1fr 40px; 
-            grid-template-columns: 280px 1fr;
-            grid-template-areas: 
-                "header header"
-                "sidebar main-viewer"
-                "footer footer";
-        }
-
-        header {
-            grid-area: header;
-            background-color: #007bff;
-            color: white;
-            padding: 0 30px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background 0.3s ease;
+            user-select: none; /* Disallow text selection for protection */
         }
-        header h1 { margin: 0; font-size: 1.4em; font-weight: 700; }
 
-        #sidebar {
-            grid-area: sidebar;
-            background-color: #ffffff;
-            padding: 20px;
-            border-right: 1px solid #e9ecef;
+        /* --- Header / Toolbar --- */
+        .toolbar {
+            height: 60px;
+            background: var(--toolbar-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+            box-shadow: var(--shadow);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .tools {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tool-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        .tool-btn:hover { background: rgba(0,0,0,0.05); color: var(--primary); }
+        [data-theme="dark"] .tool-btn:hover { background: rgba(255,255,255,0.1); }
+
+        .page-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,0,0,0.03);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        
+        .page-input {
+            width: 40px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg-color);
+            color: var(--text-main);
+            padding: 4px;
+        }
+
+        /* --- Main Layout --- */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            position: absolute;
+            top: 0; bottom: 0; left: 0;
+            z-index: 5;
+        }
+        
+        .sidebar.collapsed { transform: translateX(-100%); }
+
+        .sidebar-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .thumbnail-container {
+            flex: 1;
             overflow-y: auto;
-            box-shadow: 1px 0 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .sidebar-module { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #f0f2f5; }
-        .sidebar-module:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
-        .sidebar-module h3 { color: #007bff; font-size: 1.1em; margin: 0 0 15px; font-weight: 700; border-left: 4px solid #ffc107; padding-left: 8px; }
-
-        #main-viewer { grid-area: main-viewer; padding: 20px; display: flex; flex-direction: column; overflow: hidden; }
-        #pdf-viewer-container { flex-grow: 1; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; background-color: #ffffff; }
-        #pdfViewer { width: 100%; height: 100%; border: none; }
-
-        footer {
-            grid-area: footer;
-            background-color: #28a745;
-            color: white;
-            padding: 0 30px;
+            padding: 15px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85em;
-            font-weight: 400;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        /* --- Responsive Fixes for Mobile (Stack Layout) --- */
+        .thumbnail {
+            width: 100%;
+            border: 2px solid transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.7;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .thumbnail:hover { opacity: 1; transform: scale(1.02); }
+        .thumbnail.active { border-color: var(--primary); opacity: 1; }
+
+        /* --- PDF Viewer Area --- */
+        .viewer-area {
+            flex: 1;
+            background: var(--bg-color);
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+            margin-left: 250px; /* Offset for sidebar */
+            transition: margin-left 0.3s ease;
+            position: relative;
+        }
+
+        .viewer-area.full-width { margin-left: 0; }
+
+        .canvas-wrapper {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            position: relative;
+            align-self: flex-start; /* Important for scaling */
+        }
+
+        canvas { display: block; max-width: 100%; }
+
+        /* --- Overlay / Watermark --- */
+        .security-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            z-index: 2;
+        }
+        .watermark {
+            font-size: 4rem;
+            color: rgba(255, 0, 0, 0.05);
+            transform: rotate(-45deg);
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* --- Loading Spinner --- */
+        .loader {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .spinner {
+            width: 40px; height: 40px;
+            border: 4px solid rgba(0,0,0,0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* --- Responsive --- */
         @media (max-width: 768px) {
-            #app-layout { 
-                grid-template-columns: 1fr; 
-                grid-template-rows: 60px auto 1fr 40px; 
-                grid-template-areas: "header" "sidebar" "main-viewer" "footer"; 
-            }
-            #sidebar {
-                border-right: none; 
-                border-bottom: 1px solid #e9ecef;
-                padding-bottom: 0; 
-                max-height: 250px; 
-                overflow-y: auto; 
-            }
-            #main-viewer {
-                padding: 10px; 
-                overflow-y: auto; 
-            }
-            #pdf-viewer-container {
-                height: 100%; 
-            }
+            .sidebar { position: fixed; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
+            .viewer-area { margin-left: 0; padding: 10px; }
+            .brand span { display: none; } /* Hide text on mobile */
+            .page-controls span { display: none; }
         }
     </style>
 </head>
-<body>
-<div id="app-layout">
-    <header>
-        <h1>📘 ShikshaFlow Document Viewer</h1>
+<body oncontextmenu="return false;"> <header class="toolbar">
+        <div class="brand">
+            <button class="tool-btn" id="toggleSidebar" title="Toggle Sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+            <i class="fas fa-book-reader"></i>
+            <span>ShikshaFlow Pro</span>
+        </div>
+
+        <div class="page-controls">
+            <button class="tool-btn" id="prevPage"><i class="fas fa-chevron-left"></i></button>
+            <span>Page</span>
+            <input type="number" id="pageInput" class="page-input" value="1" min="1">
+            <span>of <span id="pageCount">--</span></span>
+            <button class="tool-btn" id="nextPage"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <div class="tools">
+            <button class="tool-btn" id="zoomOut" title="Zoom Out"><i class="fas fa-minus"></i></button>
+            <span id="zoomLevel" style="font-size: 0.85rem; width: 40px; text-align:center;">100%</span>
+            <button class="tool-btn" id="zoomIn" title="Zoom In"><i class="fas fa-plus"></i></button>
+            <div style="width: 1px; height: 20px; background: var(--border); margin: 0 5px;"></div>
+            <button class="tool-btn" id="rotatePage" title="Rotate"><i class="fas fa-sync-alt"></i></button>
+            <button class="tool-btn" id="toggleTheme" title="Dark/Light Mode"><i class="fas fa-moon"></i></button>
+            <button class="tool-btn" id="fullscreenBtn" title="Fullscreen"><i class="fas fa-expand"></i></button>
+        </div>
     </header>
 
-    <div id="sidebar">
-        <div class="sidebar-module">
-            <h3>Document Info</h3>
-            <p id="doc-title-display" style="font-weight: 700;">Loading Document...</p>
-        </div>
+    <div class="main-container">
+        
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                Pages Overview
+            </div>
+            <div class="thumbnail-container" id="thumbnailContainer">
+                </div>
         </div>
 
-    <div id="main-viewer">
-        <div id="pdf-viewer-container">
-            <iframe id="pdfViewer" title="PDF Content"></iframe>
+        <div class="viewer-area" id="viewerArea">
+            <div class="loader" id="loader">
+                <div class="spinner"></div>
+                <span style="font-size: 0.9rem; font-weight: 500;">Loading Document...</span>
+            </div>
+
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <canvas id="pdfCanvas"></canvas>
+                <div class="security-overlay">
+                    <div class="watermark" id="watermarkText">PREVIEW ONLY - DO NOT COPY</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <footer>
-        <span id="load-status">Ready for document.</span>
-        <span>© 2026 ShikshaFlow | Designed by Amrit</span>
-    </footer>
-</div>
-
-<!-- 🔥 Popup Added Here -->
-<div id="viewOnlyPopup" style="
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-">
-    <div style="
-        background: white;
-        padding: 20px 25px;
-        width: 90%;
-        max-width: 400px;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        font-family: 'Roboto', sans-serif;
-    ">
-        <h3 style="margin-top:0; color:#007bff;">Important Notice</h3>
-        <p style="color:#333; font-size:15px; line-height:1.4;">
-            📌 Documents are only available for viewing.<br>
-            Downloading, printing, or copying is not allowed.
-        </p>
-        <button onclick="closePopup()" style="
-            background:#007bff;
-            color:white;
-            border:none;
-            padding:10px 20px;
-            margin-top:12px;
-            border-radius:6px;
-            cursor:pointer;
-            font-size:15px;
-        ">Got it</button>
+    <div id="toast" style="position: fixed; bottom: 20px; right: 20px; background: #333; color: #fff; padding: 12px 24px; border-radius: 8px; transform: translateY(100px); transition: transform 0.3s; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+        Action Restricted
     </div>
-</div>
 
-<script>
-    const pdfViewer = document.getElementById('pdfViewer');
-    const pdfContainer = document.getElementById('pdf-viewer-container');
-    const docTitleDisplay = document.getElementById('doc-title-display');
-    const loadStatus = document.getElementById('load-status');
+    <script>
+        // --- State Management ---
+        const state = {
+            pdfDoc: null,
+            pageNum: 1,
+            pageRendering: false,
+            pageNumPending: null,
+            scale: 1.0, // 100%
+            rotation: 0,
+            canvas: document.getElementById('pdfCanvas'),
+            ctx: document.getElementById('pdfCanvas').getContext('2d'),
+            isDarkMode: false
+        };
 
-    function loadPDF() {
+        // --- DOM Elements ---
+        const ui = {
+            pageCount: document.getElementById('pageCount'),
+            pageInput: document.getElementById('pageInput'),
+            zoomLevel: document.getElementById('zoomLevel'),
+            loader: document.getElementById('loader'),
+            canvasWrapper: document.getElementById('canvasWrapper'),
+            thumbnailContainer: document.getElementById('thumbnailContainer'),
+            sidebar: document.getElementById('sidebar'),
+            viewerArea: document.getElementById('viewerArea')
+        };
+
+        // --- Initialization ---
+        // Get PDF URL from params or use a demo PDF
         const urlParams = new URLSearchParams(window.location.search);
-        const file = urlParams.get('file');
+        // Default to a sample PDF if none provided for demonstration
+        const url = urlParams.get('file') || 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf';
 
-        if (!file) {
-            pdfContainer.innerHTML = "<h3 style='text-align:center; padding:50px; color:#dc3545;'>❌ Error: No PDF file specified.</h3>";
-            docTitleDisplay.textContent = 'N/A';
-            loadStatus.textContent = 'Configuration Error';
-            return;
+        showLoader(true);
+
+        // Load PDF
+        pdfjsLib.getDocument(url).promise.then((pdfDoc_) => {
+            state.pdfDoc = pdfDoc_;
+            ui.pageCount.textContent = state.pdfDoc.numPages;
+            ui.pageInput.max = state.pdfDoc.numPages;
+
+            // Initial Render
+            renderPage(state.pageNum);
+            generateThumbnails();
+            showLoader(false);
+        }).catch((err) => {
+            console.error('Error loading PDF:', err);
+            showLoader(false);
+            showToast('Error loading document. Please check the URL.');
+        });
+
+        // --- Core Rendering Logic ---
+        function renderPage(num) {
+            state.pageRendering = true;
+            
+            // Fetch page
+            state.pdfDoc.getPage(num).then((page) => {
+                const viewport = page.getViewport({ scale: state.scale, rotation: state.rotation });
+                state.canvas.height = viewport.height;
+                state.canvas.width = viewport.width;
+
+                // Render Context
+                const renderContext = {
+                    canvasContext: state.ctx,
+                    viewport: viewport
+                };
+                
+                const renderTask = page.render(renderContext);
+
+                // Wait for render to finish
+                renderTask.promise.then(() => {
+                    state.pageRendering = false;
+                    
+                    // Update UI
+                    ui.pageInput.value = num;
+                    ui.zoomLevel.textContent = Math.round(state.scale * 100) + '%';
+                    updateActiveThumbnail(num);
+
+                    if (state.pageNumPending !== null) {
+                        renderPage(state.pageNumPending);
+                        state.pageNumPending = null;
+                    }
+                });
+            });
         }
 
-        const fileName = file.substring(file.lastIndexOf('/') + 1) || file;
-        docTitleDisplay.textContent = fileName.length > 30 ? fileName.substring(0,27)+'...' : fileName;
+        function queueRenderPage(num) {
+            if (state.pageRendering) {
+                state.pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
 
-        pdfViewer.src = file;
-        loadStatus.textContent = 'Loading Document...';
+        // --- Features Implementation ---
 
-        pdfViewer.onload = () => loadStatus.textContent = 'Document Loaded Successfully';
-        pdfViewer.onerror = () => {
-            loadStatus.textContent = 'Error: Failed to load document!';
-            pdfContainer.innerHTML = "<h3 style='text-align:center; padding:50px; color:#dc3545;'>❌ Error: Could not embed document. Try <a href='" + file + "' target='_blank'>opening in a new tab</a>.</h3>";
-        };
-    }
+        // 1. Navigation
+        function onPrevPage() {
+            if (state.pageNum <= 1) return;
+            state.pageNum--;
+            queueRenderPage(state.pageNum);
+        }
+        function onNextPage() {
+            if (state.pageNum >= state.pdfDoc.numPages) return;
+            state.pageNum++;
+            queueRenderPage(state.pageNum);
+        }
+        function onPageInputChange(e) {
+            let num = parseInt(e.target.value);
+            if (num >= 1 && num <= state.pdfDoc.numPages) {
+                state.pageNum = num;
+                queueRenderPage(state.pageNum);
+            }
+        }
 
-    function closePopup() {
-        document.getElementById("viewOnlyPopup").style.display = "none";
-    }
+        // 2. Zoom & Rotate
+        function onZoomIn() {
+            if(state.scale >= 3.0) return;
+            state.scale += 0.2;
+            queueRenderPage(state.pageNum);
+        }
+        function onZoomOut() {
+            if(state.scale <= 0.4) return;
+            state.scale -= 0.2;
+            queueRenderPage(state.pageNum);
+        }
+        function onRotate() {
+            state.rotation = (state.rotation + 90) % 360;
+            queueRenderPage(state.pageNum);
+        }
 
-    loadPDF();
-</script>
+        // 3. Thumbnails (Advanced)
+        function generateThumbnails() {
+            for (let i = 1; i <= state.pdfDoc.numPages; i++) {
+                state.pdfDoc.getPage(i).then((page) => {
+                    const viewport = page.getViewport({ scale: 0.2 }); // Small scale
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    canvas.className = 'thumbnail';
+                    canvas.setAttribute('data-page', i);
+                    
+                    // Render thumbnail
+                    page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                        ui.thumbnailContainer.appendChild(canvas);
+                        canvas.addEventListener('click', () => {
+                            state.pageNum = i;
+                            queueRenderPage(state.pageNum);
+                        });
+                    });
+                });
+            }
+        }
+
+        function updateActiveThumbnail(num) {
+            const thumbs = document.querySelectorAll('.thumbnail');
+            thumbs.forEach(t => t.classList.remove('active'));
+            const active = document.querySelector(`.thumbnail[data-page="${num}"]`);
+            if (active) {
+                active.classList.add('active');
+                active.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // 4. UI & Theme
+        function toggleSidebar() {
+            ui.sidebar.classList.toggle('collapsed');
+            ui.viewerArea.classList.toggle('full-width');
+        }
+
+        function toggleTheme() {
+            state.isDarkMode = !state.isDarkMode;
+            document.body.setAttribute('data-theme', state.isDarkMode ? 'dark' : 'light');
+            document.querySelector('#toggleTheme i').className = state.isDarkMode ? 'fas fa-sun' : 'fas fa-moon';
+            
+            // Update watermark color for contrast
+            document.getElementById('watermarkText').style.color = state.isDarkMode 
+                ? 'rgba(255, 255, 255, 0.05)' 
+                : 'rgba(255, 0, 0, 0.05)';
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // --- Security & Helpers ---
+        
+        // Prevent keyboard shortcuts for print/save
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 's')) {
+                e.preventDefault();
+                showToast('Printing and Downloading are disabled.');
+            }
+            // Arrow key navigation
+            if (e.key === 'ArrowRight') onNextPage();
+            if (e.key === 'ArrowLeft') onPrevPage();
+        });
+
+        function showLoader(show) {
+            ui.loader.style.display = show ? 'flex' : 'none';
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                toast.style.transform = 'translateY(100px)';
+            }, 3000);
+        }
+
+        // --- Event Listeners ---
+        document.getElementById('prevPage').addEventListener('click', onPrevPage);
+        document.getElementById('nextPage').addEventListener('click', onNextPage);
+        document.getElementById('pageInput').addEventListener('change', onPageInputChange);
+        document.getElementById('zoomIn').addEventListener('click', onZoomIn);
+        document.getElementById('zoomOut').addEventListener('click', onZoomOut);
+        document.getElementById('rotatePage').addEventListener('click', onRotate);
+        document.getElementById('toggleSidebar').addEventListener('click', toggleSidebar);
+        document.getElementById('toggleTheme').addEventListener('click', toggleTheme);
+        document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+
+    </script>
 </body>
 </html>

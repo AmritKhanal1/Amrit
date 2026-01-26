@@ -1,3 +1,5 @@
+Here is the updated full code. I have added the Full Notes card at the end of the "Prep Modules" section.
+I used a special gold-bordered style for this card to make it stand out as a premium resource, and the button now links directly to your Google Drive folder.
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,11 +11,10 @@
 
     <meta name="description" content="Prepare for B.E. and B.Arch. entrance exams for IOE, PU, KU, and PoU. Access free notes, model questions, aptitude tests, and past paper solutions.">
     <meta name="keywords" content="Engineering Entrance Nepal, B.Arch Entrance Preparation, IOE Entrance Notes, PU Entrance Model Questions, Engineering Aptitude Test, B.E. Entrance Materials">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="../../css/style.css">
      <style>
-
         .canvas-container {
             width: 100%;
             height: 100%;
@@ -28,6 +29,12 @@
             height: 100%;
         }
 
+        /* Highlight style for the Full Notes card */
+        .featured-card {
+            border: 2px solid #FFD700 !important;
+            background: rgba(255, 215, 0, 0.05) !important;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -73,7 +80,7 @@
         </div>
         <div class="header-hero-shape"></div>
     </section>
-    
+
     <section class="service-section section-padding" id="materials">
         <div class="container">
             <div class="row">
@@ -134,6 +141,19 @@
                         <a href="mock_tests.html" class="btn btn-4">Take Test <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
+
+                <div class="service-item">
+                    <div class="service-item-inner featured-card">
+                        <div class="icon" style="color: #FFD700;"><i class="fas fa-book-open"></i></div>
+                        <h3>Full Note (PCM)</h3>
+                        <p>Access the complete, all-in-one compiled resources for IOE/PU Entrance.
+                            <br><br>
+                            <small><b>Credit:</b> Prepared by <strong>Prashant Karki</strong></small>
+                        </p>
+                        <a href="https://drive.google.com/drive/folders/1mZAUCjmW086ja6cdDJDyuqJ2DiEhsl1y?usp=sharing" target="_blank" class="btn btn-4">Download PDF <i class="fas fa-download"></i></a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -159,8 +179,6 @@
             </div>
         </div>
     </section>
-
-    
 
     <footer class="footer">
         <div class="container">
@@ -212,7 +230,6 @@
         nucleusSize: 14,
         trailLength: 20, 
         colors: {
-            // CHANGE THIS COLOR TO CHANGE THE ENTIRE ICON (RINGS AND GLOW)
             primary: '#FFD700', 
             core: '#FFFFFF'
         }
@@ -223,7 +240,7 @@
         height = canvas.height = parent.offsetHeight;
         centerX = width / 2;
         centerY = height / 2;
-        
+
         const scale = Math.min(width, height) / 500;
         config.orbitRadiusX = 200 * scale;
         config.orbitRadiusY = 75 * scale;
@@ -270,18 +287,14 @@
             if (this.trail.length > config.trailLength) this.trail.shift();
         }
         draw() {
-            // --- THE REACT ICON RINGS ---
             ctx.beginPath();
             ctx.ellipse(centerX, centerY, config.orbitRadiusX, config.orbitRadiusY, this.angleOffset * (Math.PI/180), 0, 2 * Math.PI);
-            
-            // This now uses your Primary color (Gold) instead of blue
             ctx.strokeStyle = config.colors.primary; 
-            ctx.globalAlpha = 0.3; // This makes the rings look elegant but solid
-            ctx.lineWidth = 3;     // Makes the icon lines thicker
+            ctx.globalAlpha = 0.3; 
+            ctx.lineWidth = 3;     
             ctx.stroke();
-            ctx.globalAlpha = 1.0; // Reset alpha for electrons
+            ctx.globalAlpha = 1.0; 
 
-            // Electron Trail
             if (this.trail.length > 1) {
                 ctx.beginPath();
                 ctx.moveTo(this.trail[0].x, this.trail[0].y);
@@ -296,7 +309,6 @@
                 ctx.stroke();
             }
 
-            // Electron Head
             const pos = this.trail[this.trail.length - 1];
             if(pos) {
                 ctx.beginPath();
@@ -325,3 +337,4 @@
 </script>
 </body>
 </html>
+

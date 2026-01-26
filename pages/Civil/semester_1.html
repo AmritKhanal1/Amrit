@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Civil Engineering Semester 1 Notes | ShikshaFlow Nepal</title>
+
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+
+    <meta name="description" content="Access complete university notes, lab reports, and resources for BE Civil Engineering Semester 1 students in Nepal.">
+    <meta name="keywords" content="Civil Engineering Notes, BE Civil 1st Sem, Purbanchal University, Applied Mechanics, Civil Engineering Materials, Engineering Drawing, ShikshaFlow">
+
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* --- Animation Specific Styles --- */
+        .animation-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            min-height: 450px;
+        }
+
+        .hero-svg {
+            width: 100%;
+            height: auto;
+            max-width: 550px;
+            filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.1));
+        }
+
+        /* Continuous CSS Animations */
+        .hub-ring {
+            animation: rotateHub 25s linear infinite;
+            transform-origin: 400px 300px;
+        }
+
+        .road-lines {
+            animation: roadMove 1.5s linear infinite;
+        }
+
+        @keyframes rotateHub {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes roadMove {
+            from { stroke-dashoffset: 40; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Ensuring the layout doesn't break */
+        .home-image {
+            position: relative;
+            overflow: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="logo"><a href="/index.html">Shiksha<span>Flow</span></a></div>
+                <div class="links">
+                    <ul class="menu">
+                        <li class="nav-item"><a href="/index.html" class="nav-link">Home <span></span></a></li>
+                        <li class="nav-item"><a href="/pages/old_exam_papers.html" class="nav-link"> Old Exam Papers <span></span></a></li>
+                        <li class="nav-item"><a href="#about" class="nav-link">About Me <span></span></a></li>
+                        <li class="nav-item"><a href="#contact" class="nav-link">Contact <span></span></a></li>
+                    </ul>
+                </div>
+                <div class="menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home-section" id="home">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="home-text">
+                    <h4>Welcome to</h4>
+                    <h1>Civil Engineering</h1>
+                    <span class="sub-headline">BE Civil - Notes | Lab Reports | Projects | Syllabus</span>
+                    <p>
+                        Complete Civil Engineering resources for all 8 semesters. Find design notes, lab manuals, 
+                        surveying reports, and syllabus tailored for students in Nepal. 
+                        Organized semester-wise for easy access and study.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="#semesters" class="btn btn-1">View Semesters <i class="fas fa-book"></i></a>
+                        <a href="../old_exam_paper.html" class="btn btn-3">Old Papers <i class="fas fa-file-alt"></i></a>
+                    </div>
+                </div>
+                <div class="home-image">
+                    <div class="img-box animation-container">
+                        <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" class="hero-svg">
+                            <circle cx="400" cy="300" r="220" fill="none" stroke="#e0e0e0" stroke-width="1" />
+                            <circle cx="400" cy="300" r="190" fill="none" stroke="#007bff" stroke-width="2" stroke-dasharray="12,8" class="hub-ring" opacity="0.4" />
+                            
+                            <g id="central-hub">
+                                <rect x="340" y="240" width="120" height="120" rx="10" fill="#ffffff" stroke="#007bff" stroke-width="4" />
+                                <path d="M340 300 L460 300 M400 240 L400 360" stroke="#007bff" stroke-width="1" opacity="0.3" />
+                                <circle cx="400" cy="300" r="30" fill="none" stroke="#007bff" stroke-width="2" />
+                            </g>
+
+                            <g id="crane-group">
+                                <path d="M520 280 L520 120 L680 150" stroke="#333" stroke-width="6" fill="none" stroke-linecap="round" />
+                                <line id="crane-wire" x1="640" y1="142" x2="640" y2="220" stroke="#666" stroke-width="2" />
+                                <rect id="crane-load" x="620" y="220" width="40" height="25" fill="#ffc107" rx="2" />
+                            </g>
+
+                            <g id="road-group">
+                                <path d="M150 520 Q400 450 650 520" stroke="#444" stroke-width="35" fill="none" stroke-linecap="round" />
+                                <path d="M150 520 Q400 450 650 520" stroke="#fff" stroke-width="2" stroke-dasharray="15,15" fill="none" class="road-lines" />
+                            </g>
+
+                            <g id="survey-group">
+                                <line x1="220" y1="360" x2="190" y2="430" stroke="#333" stroke-width="4" />
+                                <line x1="220" y1="360" x2="250" y2="430" stroke="#333" stroke-width="4" />
+                                <rect x="200" y="340" width="40" height="25" rx="5" fill="#ff5722" />
+                                <circle cx="235" cy="352" r="4" fill="white" />
+                            </g>
+
+                            <g id="water-group">
+                                <path d="M120 200 C180 180, 220 250, 280 220" stroke="#03a9f4" stroke-width="10" fill="none" stroke-linecap="round" />
+                                <circle id="water-bubble" cx="120" cy="200" r="5" fill="white" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-hero-shape"></div>
+    </section>
+
+    <div class="row justify-content-center">
+        
+        <div class="pricing-item">
+            <div class="pricing-plan">
+                <div class="pricing-header"><h3>Mathematics I</h3></div>
+                <div class="pricing-body">
+                    <ul>
+                        <li><a href="#">Unit 1: Derivatives and their Applications</a></li>
+                        <li><a href="#">Unit 2: Anti-derivatives and their Applications</a></li>
+                        <li><a href="#">Unit 3: Plane Analytic Geometry</a></li>
+                        <li><a href="#">Unit 4: Vector Algebra</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="pricing-item">
+            <div class="pricing-plan">
+                <div class="pricing-header"><h3>Applied Mechanics-I</h3></div>
+                <div class="pricing-body">
+                    <ul>
+                        <li><a href="#">Unit 1: Introduction to Mechanics</a></li>
+                        <li><a href="#">Unit 2: System of Forces</a></li>
+                        <li><a href="#">Unit 3: Distributed Forces</a></li>
+                        <li><a href="#">Unit 4: Friction</a></li>
+                        <li><a href="#">Unit 5: Introduction to Structures</a></li>
+                        <li><a href="#">Unit 6: Introduction to Analysis of Beam</a></li>
+                        <li><a href="#">Unit 7: Introduction to Analysis of Frame</a></li>
+                        <li><a href="#">Unit 8: Introduction to Analysis of Truss</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="pricing-item">
+            <div class="pricing-plan">
+                <div class="pricing-header"><h3>Chemistry</h3></div>
+                <div class="pricing-body">
+                    <ul>
+                        <li><a href="#">Unit 1: Environmental Chemistry</a></li>
+                        <li><a href="#">Unit 2: Electrochemistry</a></li>
+                        <li><a href="#">Unit 3: Ionic Equilibrium</a></li>
+                        <li><a href="#">Unit 4: Transition Elements</a></li>
+                        <li><a href="#">Unit 5: Co-ordination Complex</a></li>
+                        <li><a href="#">Unit 6: Stereoisomerism</a></li>
+                        <li><a href="#">Unit 7: Types of Organic Reactions</a></li>
+                        <li><a href="#">Unit 8: Organometallic Compounds & Explosives</a></li>
+                        <li><a href="#">Unit 9: Polymers and Applied Chemistry</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="pricing-item">
+            <div class="pricing-plan">
+                <div class="pricing-header"><h3>Civil Eng. Materials</h3></div>
+                <div class="pricing-body">
+                    <ul>
+                        <li><a href="#">Unit 1: Intro to Construction Materials</a></li>
+                        <li><a href="#">Unit 2: Building Stones and Aggregates</a></li>
+                        <li><a href="#">Unit 3: Clay Products (Bricks)</a></li>
+                        <li><a href="#">Unit 4: Cementing Materials</a></li>
+                        <li><a href="#">Unit 5: Mortar</a></li>
+                        <li><a href="#">Unit 6: Timber and Bamboo</a></li>
+                        <li><a href="#">Unit 7: Metals and Alloys</a></li>
+                        <li><a href="#">Unit 8: Paints and Varnishes</a></li>
+                        <li><a href="#">Unit 9: Asphalt, Bitumen, and Tar</a></li>
+                        <li><a href="#">Unit 10: Miscellaneous Materials</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="pricing-item">
+            <div class="pricing-plan">
+                <div class="pricing-header"><h3>Engineering Drawing I</h3></div>
+                <div class="pricing-body">
+                    <ul>
+                        <li><a href="#">Unit 1: Instrumental Drawing Practices</a></li>
+                        <li><a href="#">Unit 2: Freehand Technical Lettering</a></li>
+                        <li><a href="#">Unit 3: Dimensioning</a></li>
+                        <li><a href="#">Unit 4: Applied Geometry</a></li>
+                        <li><a href="#">Unit 5: Basic Descriptive Geometry</a></li>
+                        <li><a href="#">Unit 6: Theory of Projection</a></li>
+                        <li><a href="#">Unit 7: Multi-view Orthographic Projection</a></li>
+                        <li><a href="#">Unit 8: Sectional Views</a></li>
+                        <li><a href="#">Unit 9: Auxiliary Views</a></li>
+                        <li><a href="#">Unit 10: Freehand Sketching</a></li>
+                        <li><a href="#">Unit 11: Developments and Intersections</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="pricing-item">
+            <div class="pricing-plan">
+                <div class="pricing-header"><h3>Basic Electrical Eng.</h3></div>
+                <div class="pricing-body">
+                    <ul>
+                        <li><a href="#">Unit 1: General Electric System</a></li>
+                        <li><a href="#">Unit 2: DC Circuits</a></li>
+                        <li><a href="#">Unit 3: Network Theorems</a></li>
+                        <li><a href="#">Unit 4: Inductance and Capacitance</a></li>
+                        <li><a href="#">Unit 5: AC Fundamentals</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="pricing-item">
+            <div class="pricing-plan">
+                <div class="pricing-header"><h3>Workshop Technology</h3></div>
+                <div class="pricing-body">
+                    <ul>
+                        <li><a href="#">Unit 1: Introductory Concepts</a></li>
+                        <li><a href="#">Unit 2: Industrial Safety</a></li>
+                        <li><a href="#">Unit 3: Bench Work and Fitting Shop</a></li>
+                        <li><a href="#">Unit 4: Machine Shop</a></li>
+                        <li><a href="#">Unit 5: Welding Shop</a></li>
+                        <li><a href="#">Unit 6: Plumbing Shop</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <section class="about-section section-padding" id="about">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="about-content">
+                    <div class="section-title">
+                        <h5 class="sub-title">Program Overview</h5>
+                        <h3 class="main-title">BE Civil Engineering</h3>
+                        <ul class="line"><li></li><li></li><li></li></ul>
+                    </div>
+                    <p class="about-text">
+                        The first semester of Civil Engineering at Purbanchal University establishes core scientific principles. 
+                        Students cover 19 credit hours across subjects including Applied Mechanics, Chemistry, and Engineering 
+                        Drawing, providing the technical foundation required for structural design and material science 
+                        in future semesters.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row footer-widgets">
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="/pages/old_exam_papers.html">Old Papers</a></li>
+                        <li><a href="#about">About Me</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Get In Touch</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@ShikshaFlow.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</li>
+                    </ul>
+                </div>
+                <div class="footer-col footer-social-col">
+                    <h4>Follow Us</h4>
+                    <div class="footer-social-icons">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center copyright-row">
+                <p class="copyright-text">&copy; 2025 ShikshaFlow | All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // GSAP Animation Logic for the "Collage" feel
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+            // 1. Initial entrance - Scale up the central hub
+            tl.from("#central-hub", { duration: 1.2, scale: 0, transformOrigin: "50% 50%", opacity: 0, ease: "back.out(1.7)" });
+
+            // 2. Animate the crane sliding in and the load moving
+            tl.from("#crane-group", { duration: 1, x: 100, opacity: 0 }, "-=0.5");
+            gsap.to("#crane-load", { duration: 2, y: 40, repeat: -1, yoyo: true, ease: "sine.inOut" });
+            gsap.to("#crane-wire", { duration: 2, attr: { y2: 260 }, repeat: -1, yoyo: true, ease: "sine.inOut" });
+
+            // 3. Slide the road in
+            tl.from("#road-group", { duration: 1, y: 50, opacity: 0 }, "-=0.7");
+
+            // 4. Pop the survey tool and water pipe
+            tl.from("#survey-group", { duration: 0.8, scale: 0, transformOrigin: "50% 50%", opacity: 0 }, "-=0.5");
+            tl.from("#water-group", { duration: 0.8, x: -50, opacity: 0 }, "-=0.5");
+
+            // 5. Flowing water bubble animation
+            gsap.to("#water-bubble", {
+                duration: 3,
+                repeat: -1,
+                motionPath: {
+                    path: "M120 200 C180 180, 220 250, 280 220",
+                    alignOrigin: [0.5, 0.5]
+                },
+                ease: "none"
+            });
+        });
+    </script>
+    <script src="main.js"></script> 
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chemistry Notes | ShikshaFlow</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css"> 
+    
+    <style>
+        /* --- 1. CHEMISTRY VORTEX ANIMATION --- */
+        .vortex-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 800px;
+        }
+
+        /* Core (Nucleus) */
+        .core {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #e67e22; /* Chemistry Orange */
+            border-radius: 50%;
+            box-shadow: 0 0 40px #e67e22, 0 0 80px #d35400;
+            z-index: 10;
+            animation: pulse-core 1.5s infinite alternate;
+        }
+
+        /* Rings (Electron Shells) */
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-top: 4px solid #3498db; /* Blue Energy */
+            border-bottom: 4px solid #2ecc71; /* Green Energy */
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+            animation: spin-ring linear infinite;
+        }
+
+        /* Different Sizes & Speeds for 3D Effect */
+        .r1 { width: 120px; height: 120px; animation-duration: 2s; border-left: 4px solid #9b59b6; }
+        .r2 { width: 180px; height: 180px; animation-duration: 3s; border-right: 4px solid #e74c3c; animation-direction: reverse; }
+        .r3 { width: 240px; height: 240px; animation-duration: 5s; border-top: 4px solid #f1c40f; }
+
+        /* Electrons */
+        .electron {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #fff;
+            top: 50%;
+            left: 50%;
+            z-index: 5;
+        }
+        
+        .e1 { animation: orbit-1 1s infinite linear; }
+        .e2 { animation: orbit-2 1.5s infinite linear; }
+        .e3 { animation: orbit-3 2s infinite linear; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes pulse-core {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            100% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 60px #e67e22; }
+        }
+
+        @keyframes spin-ring {
+            0% { transform: rotateX(60deg) rotateY(0deg) rotateZ(0deg); }
+            100% { transform: rotateX(60deg) rotateY(360deg) rotateZ(360deg); }
+        }
+
+        @keyframes orbit-1 {
+            0% { transform: rotate(0deg) translateX(70px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(70px) rotate(-360deg); }
+        }
+        @keyframes orbit-2 {
+            0% { transform: rotate(120deg) translateX(100px) rotate(-120deg); }
+            100% { transform: rotate(480deg) translateX(100px) rotate(-480deg); }
+        }
+        @keyframes orbit-3 {
+            0% { transform: rotate(240deg) translateX(130px) rotate(-240deg); }
+            100% { transform: rotate(600deg) translateX(130px) rotate(-600deg); }
+        }
+
+        /* --- LAYOUT STYLES --- */
+        .img-box { display: flex; justify-content: center; align-items: center; height: 400px; }
+        
+        /* Topic Buttons */
+        .topic-btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .topic-link {
+            display: flex; align-items: center; justify-content: center;
+            background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 10px;
+            font-weight: 600; color: #444; text-decoration: none; transition: 0.2s;
+        }
+        .topic-link i { margin-right: 10px; color: #e67e22; }
+        .topic-link:hover { background: #e67e22; color: #fff !important; transform: scale(1.05); }
+        .topic-link:hover i { color: #fff; }
+
+        .topic-btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .topic-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            padding: 12px 8px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .topic-link i {
+            margin-right: 8px;
+            font-size: 1rem;
+            color: #4922e6; /* Matching your orange theme */
+        }
+        .topic-link:hover {
+            background: #e67e22;
+            color: #ffffff !important;
+            border-color: #e67e22;
+            transform: translateY(-3px);
+        }
+        .topic-link:hover i {
+            color: #ffffff;
+        }
+        .pricing-item {
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 40px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="logo"><a href="/index.html">Shiksha<span>Flow</span></a></div>
+                <div class="links">
+                    <ul class="menu">
+                        <li class="nav-item"><a href="/index.html" class="nav-link">Home</a></li>
+                        <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home-section" id="home">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="home-text">
+                    <h4>Targeting IOE, PU, KU & PoU</h4>
+                    <h1>Chemistry Entrance Prep</h1>
+                    <span>High-Speed Revision | Master Reactions</span>
+                    <p>Instant access to high-yield notes for Physical, Inorganic, and Organic Chemistry.
+                        <br>Start your preparation now.
+                    </p>
+                    <a href="#chapters" class="btn btn-1">Start Learning <i class="fas fa-bolt"></i></a>
+                </div>
+                <div class="home-image">
+                    <div class="img-box">
+                        <div class="vortex-container">
+                            <div class="core"></div>
+                            <div class="ring r1"></div>
+                            <div class="ring r2"></div>
+                            <div class="ring r3"></div>
+                            <div class="electron e1"></div>
+                            <div class="electron e2"></div>
+                            <div class="electron e3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-hero-shape"></div>
+    </section>
+
+    <section class="pricing section-padding" id="chapters">
+    <div class="container">
+        <div class="section-title text-align">
+            <h3 class="main-title">Chemistry Modules</h3>
+            <ul class="line"><li></li><li></li><li></li></ul>
+        </div>
+        
+        <!-- Physical Chemistry -->
+        <div class="pricing-item" style="width:100%; max-width:1000px; margin: 0 auto 30px;">
+            <div class="pricing-plan">
+                <div class="pricing-header">
+                    <i class="fas fa-atom fa-2x" style="color: #3498db;"></i>
+                    <h3>1. Physical Chemistry</h3>
+                </div>
+                <div class="topic-btn-grid">
+                    <a href="#" class="topic-link"><i class="fas fa-calculator"></i> Chemical Arithmetic</a>
+                    <a href="#" class="topic-link"><i class="fas fa-wind"></i> States of Matter</a>
+                    <a href="#" class="topic-link"><i class="fas fa-atom"></i> Atomic Structure</a>
+                    <a href="#" class="topic-link"><i class="fas fa-balance-scale"></i> Periodic Classification</a>
+                    <a href="#" class="topic-link"><i class="fas fa-exchange-alt"></i> Oxidation & Reduction</a>
+                    <a href="#" class="topic-link"><i class="fas fa-chart-bar"></i> Equilibrium</a>
+                    <a href="#" class="topic-link"><i class="fas fa-flask"></i> Volumetric Analysis</a>
+                    <a href="#" class="topic-link"><i class="fas fa-vial"></i> Ionic Equilibrium</a>
+                    <a href="#" class="topic-link"><i class="fas fa-bolt"></i> Electrochemistry</a>
+                    <a href="#" class="topic-link"><i class="fas fa-fire"></i> Energetics</a>
+                    <a href="#" class="topic-link"><i class="fas fa-stopwatch"></i> Chemical Kinetics</a>
+                    <a href="#" class="topic-link"><i class="fas fa-shapes"></i> Chemical Bonding</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inorganic Chemistry -->
+        <div class="pricing-item" style="width:100%; max-width:1000px; margin: 0 auto 30px;">
+            <div class="pricing-plan">
+                <div class="pricing-header">
+                    <i class="fas fa-gem fa-2x" style="color: #e67e22;"></i>
+                    <h3>2. Inorganic Chemistry</h3>
+                </div>
+                <div class="topic-btn-grid">
+                    <a href="#" class="topic-link"><i class="fas fa-tint"></i> Hydrogen</a>
+                    <a href="#" class="topic-link"><i class="fas fa-wind"></i> Oxygen & Ozone</a>
+                    <a href="#" class="topic-link"><i class="fas fa-water"></i> Water</a>
+                    <a href="#" class="topic-link"><i class="fas fa-cloud"></i> Nitrogen Compounds</a>
+                    <a href="#" class="topic-link"><i class="fas fa-flask"></i> Halogens</a>
+                    <a href="#" class="topic-link"><i class="fas fa-gem"></i> Carbon</a>
+                    <a href="#" class="topic-link"><i class="fas fa-fire"></i> Phosphorous</a>
+                    <a href="#" class="topic-link"><i class="fas fa-smog"></i> Sulphur</a>
+                    <a href="#" class="topic-link"><i class="fas fa-gas-pump"></i> Noble Gases</a>
+                    <a href="#" class="topic-link"><i class="fas fa-leaf"></i> Environment Pollution</a>
+                    <a href="#" class="topic-link"><i class="fas fa-hammer"></i> Metallurgical Principles</a>
+                    <a href="#" class="topic-link"><i class="fas fa-bolt"></i> Alkali Metals</a>
+                    <a href="#" class="topic-link"><i class="fas fa-mountain"></i> Alkaline Earth Metals</a>
+                    <a href="#" class="topic-link"><i class="fas fa-coins"></i> Coinage Metals</a>
+                    <a href="#" class="topic-link"><i class="fas fa-industry"></i> Extraction: Zinc & Mercury</a>
+                    <a href="#" class="topic-link"><i class="fas fa-cube"></i> Iron Compounds</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Organic Chemistry -->
+        <div class="pricing-item" style="width:100%; max-width:1000px; margin: 0 auto 30px;">
+            <div class="pricing-plan">
+                <div class="pricing-header">
+                    <i class="fas fa-dna fa-2x" style="color: #2ecc71;"></i>
+                    <h3>3. Organic Chemistry</h3>
+                </div>
+                <div class="topic-btn-grid">
+                    <a href="#" class="topic-link"><i class="fas fa-book"></i> Fundamental Principles</a>
+                    <a href="#" class="topic-link"><i class="fas fa-filter"></i> Purification</a>
+                    <a href="#" class="topic-link"><i class="fas fa-tag"></i> Nomenclature</a>
+                    <a href="#" class="topic-link"><i class="fas fa-project-diagram"></i> Structural Isomerism</a>
+                    <a href="#" class="topic-link"><i class="fas fa-cogs"></i> Reaction Mechanism</a>
+                    <a href="#" class="topic-link"><i class="fas fa-oil-can"></i> Hydrocarbons</a>
+                    <a href="#" class="topic-link"><i class="fas fa-ring"></i> Haloalkanes & Haloarenes</a>
+                    <a href="#" class="topic-link"><i class="fas fa-tint"></i> Alcohols & Phenols</a>
+                    <a href="#" class="topic-link"><i class="fas fa-wine-bottle"></i> Ethers</a>
+                    <a href="#" class="topic-link"><i class="fas fa-flask"></i> Aldehydes & Ketones</a>
+                    <a href="#" class="topic-link"><i class="fas fa-vial"></i> Carboxylic Acids</a>
+                    <a href="#" class="topic-link"><i class="fas fa-atom"></i> Derivatives</a>
+                    <a href="#" class="topic-link"><i class="fas fa-flask"></i> Nitro Compounds</a>
+                    <a href="#" class="topic-link"><i class="fas fa-vial"></i> Amines</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+     <footer class="footer">
+        <div class="container">
+            <div class="row footer-widgets">
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../old_exam_papers.html">Old Papers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@ShikshaFlow.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Follow Us</h4>
+                    <div class="footer-social-icons">
+                        <a href="https://github.com/AmritKhanal1" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="https://www.instagram.com/amritkh_10/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://api.whatsapp.com/send?phone=9746363722" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center copyright-row">
+                <p class="copyright-text">&copy; 2026 ShikshaFlow | All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Physics Notes & Syllabus | ShikshaFlow Nepal</title>
+
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+
+    <meta name="description" content="Comprehensive Physics notes for Class 11 and Entrance Preparation. Detailed breakdown of Mechanics, Thermodynamics, and more.">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../../css/style.css"> 
+    
+    <style>
+        /* CSS for the Topic Buttons */
+        .topic-btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .topic-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            padding: 12px 8px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .topic-link i {
+            margin-right: 8px;
+            font-size: 1rem;
+            color: #4922e6; /* Matching your orange theme */
+        }
+        .topic-link:hover {
+            background: #4922e6;
+            color: #ffffff !important;
+            border-color: #4922e6;
+            transform: translateY(-3px);
+        }
+        .topic-link:hover i {
+            color: #ffffff;
+        }
+        .pricing-item {
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 40px;
+        }
+
+        /* --- NEW STYLES FOR REACT LOGO ANIMATION --- */
+        .react-logo-container {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* No CSS animation here, handled by JS as requested */
+        }
+
+        .react-nucleus {
+            width: 40px;
+            height: 40px;
+            background-color: #61DAFB;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 10;
+            box-shadow: 0 0 15px #61DAFB;
+        }
+
+        .react-orbit {
+            width: 100%;
+            height: 35%; /* makes it elliptical */
+            border: 8px solid #61DAFB;
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 5px #61DAFB;
+            opacity: 0.9;
+        }
+
+        /* Initial positions for orbits */
+        .orbit-1 { transform: rotate(0deg); }
+        .orbit-2 { transform: rotate(60deg); }
+        .orbit-3 { transform: rotate(-60deg); }
+
+        /* Container for the logo to center it in the hero image area */
+        .img-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="logo"><a href="/index.html">Shiksha<span>Flow</span></a></div>
+                <div class="links">
+                    <ul class="menu">
+                        <li class="nav-item"><a href="/index.html" class="nav-link active">Home <span></span></a></li>
+                        <li class="nav-item"><a href="/pages/old_exam_papers.html" class="nav-link"> Past Entrance Papers <span></span></a></li>
+                        <li class="nav-item"><a href="http://www.amritkhanal10.com.np/" target="_blank" class="nav-link">Main Website <span></span></a></li>
+                        <li class="nav-item"><a href="#about" class="nav-link">About Entrance <span></span></a></li>
+                    </ul>
+                </div>
+                <div class="menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home-section" id="home">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="home-text">
+                    <h4>Targeting IOE, PU, KU & PoU</h4>
+                    <h1>B.E. & B.Arch. Entrance</h1>
+                    <span>Comprehensive Study Materials | Model Sets | Mock Tests</span>
+                    <p>Crack the engineering entrance exam with our curated resources. High-yield notes for Physics, Chemistry, and Mathematics, plus specialized Aptitude materials for Architecture aspirants.
+                        <br>
+                        Updated for the 2026 Academic Session.
+                    </p>
+                    <a href="#materials" class="btn btn-1">Start Preparing <i class="fas fa-rocket"></i></a>
+                    <a href="../entrance_model_sets.html" class="btn btn-3">Model Sets <i class="fas fa-file-signature"></i></a>
+                </div>
+                <div class="home-image">
+                    <div class="img-box">
+                        <div id="react-logo" class="react-logo-container">
+                            <div class="react-nucleus"></div>
+                            <div class="react-orbit orbit-1"></div>
+                            <div class="react-orbit orbit-2"></div>
+                            <div class="react-orbit orbit-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-hero-shape"></div>
+    </section>
+    <section class="pricing section-padding" id="chapters">
+        <div class="container">
+            <div class="row">
+                <div class="section-title text-align">
+                    <h5 class="sub-title">NEB & Entrance Syllabus</h5>
+                    <h3 class="main-title">Physics Subject Modules</h3>
+                    <ul class="line"><li></li><li></li><li></li></ul>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+
+                <div class="pricing-item">
+                    <div class="pricing-plan">
+                        <div class="pricing-header">
+                            <i class="fas fa-tools fa-2x" style="color: #3498db;"></i>
+                            <h3>1. Mechanics</h3>
+                        </div>
+                        <div class="pricing-body">
+                            <div class="topic-btn-grid">
+                                <a href="#" class="topic-link"><i class="fas fa-square-root-alt"></i> Vectors</a>
+                                <a href="#" class="topic-link"><i class="fas fa-car-side"></i> Kinematics</a>
+                                <a href="#" class="topic-link"><i class="fas fa-hand-rock"></i> Newton's Laws</a>
+                                <a href="#" class="topic-link"><i class="fas fa-dumbbell"></i> Work-Energy</a>
+                                <a href="#" class="topic-link"><i class="fas fa-circle-notch"></i> Circular Motion</a>
+                                <a href="#" class="topic-link"><i class="fas fa-globe"></i> Gravitation</a>
+                                <a href="#" class="topic-link"><i class="fas fa-spinner"></i> Rotational</a>
+                                <a href="#" class="topic-link"><i class="fas fa-water"></i> Fluid Mechanics</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pricing-item">
+                    <div class="pricing-plan">
+                        <div class="pricing-header">
+                            <i class="fas fa-fire-alt fa-2x" style="color: #e67e22;"></i>
+                            <h3>2. Heat & Thermodynamics</h3>
+                        </div>
+                        <div class="pricing-body">
+                            <div class="topic-btn-grid">
+                                <a href="#" class="topic-link"><i class="fas fa-thermometer-half"></i> Temperature</a>
+                                <a href="#" class="topic-link"><i class="fas fa-expand-arrows-alt"></i> Expansion</a>
+                                <a href="#" class="topic-link"><i class="fas fa-exchange-alt"></i> Heat Transfer</a>
+                                <a href="#" class="topic-link"><i class="fas fa-atom"></i> Kinetic Theory</a>
+                                <a href="#" class="topic-link"><i class="fas fa-history"></i> Laws of TD</a>
+                                <a href="#" class="topic-link"><i class="fas fa-sync"></i> Carnot Cycle</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pricing-item">
+                    <div class="pricing-plan">
+                        <div class="pricing-header">
+                            <i class="fas fa-eye fa-2x" style="color: #f1c40f;"></i>
+                            <h3>3. Geometric & Physical Optics</h3>
+                        </div>
+                        <div class="pricing-body">
+                            <div class="topic-btn-grid">
+                                <a href="#" class="topic-link"><i class="fas fa-mirror"></i> Reflection</a>
+                                <a href="#" class="topic-link"><i class="fas fa-glasses"></i> Refraction</a>
+                                <a href="#" class="topic-link"><i class="fas fa-search"></i> Lenses</a>
+                                <a href="#" class="topic-link"><i class="fas fa-rainbow"></i> Dispersion</a>
+                                <a href="#" class="topic-link"><i class="fas fa-wave-square"></i> Interference</a>
+                                <a href="#" class="topic-link"><i class="fas fa-border-all"></i> Diffraction</a>
+                                <a href="#" class="topic-link"><i class="fas fa-sun"></i> Polarization</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pricing-item">
+                    <div class="pricing-plan">
+                        <div class="pricing-header">
+                            <i class="fas fa-volume-up fa-2x" style="color: #9b59b6;"></i>
+                            <h3>4. Waves & Sound</h3>
+                        </div>
+                        <div class="pricing-body">
+                            <div class="topic-btn-grid">
+                                <a href="#" class="topic-link"><i class="fas fa-water"></i> Wave Motion</a>
+                                <a href="#" class="topic-link"><i class="fas fa-music"></i> Pipes/Strings</a>
+                                <a href="#" class="topic-link"><i class="fas fa-broadcast-tower"></i> Doppler Effect</a>
+                                <a href="#" class="topic-link"><i class="fas fa-deaf"></i> Acoustics</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pricing-item">
+                    <div class="pricing-plan">
+                        <div class="pricing-header">
+                            <i class="fas fa-bolt fa-2x" style="color: #e74c3c;"></i>
+                            <h3>5. Electricity & Magnetism</h3>
+                        </div>
+                        <div class="pricing-body">
+                            <div class="topic-btn-grid">
+                                <a href="#" class="topic-link"><i class="fas fa-battery-full"></i> Electrostatics</a>
+                                <a href="#" class="topic-link"><i class="fas fa-microchip"></i> DC Circuits</a>
+                                <a href="#" class="topic-link"><i class="fas fa-magnet"></i> Magnetism</a>
+                                <a href="#" class="topic-link"><i class="fas fa-charging-station"></i> Induction</a>
+                                <a href="#" class="topic-link"><i class="fas fa-plug"></i> Alternating Current</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pricing-item">
+                    <div class="pricing-plan">
+                        <div class="pricing-header">
+                            <i class="fas fa-microscope fa-2x" style="color: #1abc9c;"></i>
+                            <h3>6. Modern Physics</h3>
+                        </div>
+                        <div class="pricing-body">
+                            <div class="topic-btn-grid">
+                                <a href="#" class="topic-link"><i class="fas fa-lightbulb"></i> Photoelectric</a>
+                                <a href="#" class="topic-link"><i class="fas fa-braille"></i> Bohr Theory</a>
+                                <a href="#" class="topic-link"><i class="fas fa-project-diagram"></i> Semiconductors</a>
+                                <a href="#" class="topic-link"><i class="fas fa-biohazard"></i> Radioactivity</a>
+                                <a href="#" class="topic-link"><i class="fas fa-rocket"></i> Universe/Space</a>
+                                <a href="#" class="topic-link"><i class="fas fa-dna"></i> Nano-tech</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row footer-widgets">
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../old_exam_papers.html">Old Papers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@ShikshaFlow.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Follow Us</h4>
+                    <div class="footer-social-icons">
+                        <a href="https://github.com/AmritKhanal1" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="https://www.instagram.com/amritkh_10/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://api.whatsapp.com/send?phone=9746363722" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center copyright-row">
+                <p class="copyright-text">&copy; 2026 ShikshaFlow | All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const logo = document.getElementById('react-logo');
+            let angle = 0;
+            
+            // Function to handle the rotation animation
+            function animateReactLogo() {
+                angle = (angle + 0.5) % 360; // 0.5 deg per frame for smooth slow spin
+                logo.style.transform = `rotate(${angle}deg)`;
+                requestAnimationFrame(animateReactLogo);
+            }
+
+            // Start the animation
+            animateReactLogo();
+        });
+    </script>
+</body>
+</html>

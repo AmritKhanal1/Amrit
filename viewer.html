@@ -516,23 +516,15 @@
     const pdfViewer = document.getElementById('pdfViewer');
     const pdfContainer = document.getElementById('pdf-viewer-container');
     const docTitleDisplay = document.getElementById('doc-title-display');
-    const docStatus = document.getElementById('doc-status');
-    const loadTime = document.getElementById('load-time');
     const loadStatus = document.getElementById('load-status');
-    let loadStartTime;
 
     function loadPDF() {
-        loadStartTime = Date.now();
         const urlParams = new URLSearchParams(window.location.search);
         const file = urlParams.get('file');
 
         if (!file) {
             pdfContainer.innerHTML = "<div style='display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;padding:50px;color:#dc2626;'><div style='font-size:64px;margin-bottom:20px;'>❌</div><h3 style='font-family:Crimson Pro,serif;font-size:1.5em;margin-bottom:10px;'>Error: No PDF file specified</h3><p style='color:#64748b;'>Please provide a file parameter in the URL.</p></div>";
             docTitleDisplay.textContent = 'N/A';
-            docStatus.textContent = 'Error';
-            docStatus.style.background = 'rgba(220, 38, 38, 0.1)';
-            docStatus.style.color = '#dc2626';
-            loadTime.textContent = '--';
             loadStatus.innerHTML = '<span class="status-dot" style="background:#dc2626;box-shadow:0 0 10px #dc2626;"></span>Configuration Error';
             return;
         }
@@ -541,25 +533,13 @@
         docTitleDisplay.textContent = fileName.length > 35 ? fileName.substring(0, 32) + '...' : fileName;
 
         pdfViewer.src = file;
-        docStatus.textContent = 'Loading...';
-        docStatus.style.background = 'rgba(245, 158, 11, 0.1)';
-        docStatus.style.color = '#f59e0b';
         loadStatus.innerHTML = '<span class="status-dot" style="background:#f59e0b;box-shadow:0 0 10px #f59e0b;"></span>Loading Document...';
 
         pdfViewer.onload = () => {
-            const loadDuration = ((Date.now() - loadStartTime) / 1000).toFixed(2);
-            docStatus.textContent = 'Ready';
-            docStatus.style.background = 'rgba(16, 185, 129, 0.1)';
-            docStatus.style.color = '#10b981';
-            loadTime.textContent = loadDuration + 's';
             loadStatus.innerHTML = '<span class="status-dot" style="background:#10b981;box-shadow:0 0 10px #10b981;"></span>Document Loaded Successfully';
         };
         
         pdfViewer.onerror = () => {
-            docStatus.textContent = 'Failed';
-            docStatus.style.background = 'rgba(220, 38, 38, 0.1)';
-            docStatus.style.color = '#dc2626';
-            loadTime.textContent = '--';
             loadStatus.innerHTML = '<span class="status-dot" style="background:#dc2626;box-shadow:0 0 10px #dc2626;"></span>Error: Failed to load';
             pdfContainer.innerHTML = "<div style='display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;padding:50px;color:#dc2626;'><div style='font-size:64px;margin-bottom:20px;'>⚠️</div><h3 style='font-family:Crimson Pro,serif;font-size:1.5em;margin-bottom:10px;'>Could not embed document</h3><p style='color:#64748b;margin-bottom:20px;'>The document failed to load in the viewer.</p><a href='" + file + "' target='_blank' style='background:linear-gradient(135deg,#2563eb 0%,#1e40af 100%);color:white;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:600;'>Open in New Tab</a></div>";
         };

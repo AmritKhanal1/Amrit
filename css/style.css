@@ -1044,7 +1044,7 @@ footer::before {
         background: linear-gradient(135deg, rgba(8, 10, 26, 0.98) 0%, rgba(28, 32, 64, 0.98) 100%);
         backdrop-filter: blur(40px);
         transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        padding: 100px 0 40px;
+        padding: 80px 0 40px; /* Changed from 100px to 80px for top alignment */
         box-shadow: -10px 0 50px rgba(0, 0, 0, 0.5);
         overflow-y: auto;
         z-index: 10000;
@@ -1060,6 +1060,7 @@ footer::before {
         gap: 0;
         width: 100%;
         padding: 0;
+        align-items: flex-start; /* Align items to top */
     }
     
     .navbar .menu .nav-item {
@@ -1093,6 +1094,7 @@ footer::before {
         width: 100%;
         display: flex;
         align-items: center;
+        justify-content: flex-start; /* Left align text */
         border-radius: 0;
         font-size: 16px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);

@@ -133,8 +133,8 @@
         .sidebar-module {
             background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
             border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
             border: 1px solid var(--border);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
@@ -164,8 +164,8 @@
         .sidebar-module h3 {
             color: var(--text-primary);
             font-family: 'Crimson Pro', serif;
-            font-size: 1.3em;
-            margin-bottom: 16px;
+            font-size: 1.15em;
+            margin-bottom: 14px;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -173,22 +173,22 @@
         }
 
         .icon-badge {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         #doc-title-display {
             font-weight: 600;
             color: var(--text-primary);
-            font-size: 0.95em;
-            line-height: 1.6;
-            padding: 12px;
+            font-size: 0.9em;
+            line-height: 1.5;
+            padding: 10px;
             background: rgba(37, 99, 235, 0.05);
             border-radius: 8px;
             border-left: 3px solid var(--primary);
@@ -238,13 +238,14 @@
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: rgba(255, 255, 255, 0.9);
             padding: 0 40px;
-            height: 55px;
+            height: 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9em;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 0.95em;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15);
             animation: slideUp 0.5s ease-out 0.4s backwards;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         @keyframes slideUp {
@@ -255,20 +256,40 @@
         #load-status {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            font-weight: 500;
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background: var(--secondary);
             border-radius: 50%;
             animation: pulse 2s infinite;
+            box-shadow: 0 0 10px var(--secondary);
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.9); }
+        }
+
+        .footer-copyright {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
         }
 
         /* Popup Styling */
@@ -409,12 +430,12 @@
                 border-right: none;
                 border-bottom: 1px solid var(--border);
                 padding: 20px;
-                max-height: 200px;
-                overflow-y: auto;
+                max-height: none;
+                overflow-y: visible;
             }
 
             .sidebar-module {
-                padding: 18px;
+                padding: 16px;
                 margin-bottom: 12px;
             }
 
@@ -428,11 +449,12 @@
 
             footer {
                 padding: 0 20px;
-                height: 50px;
+                height: 55px;
                 font-size: 0.85em;
-                flex-direction: column;
-                gap: 5px;
-                justify-content: center;
+            }
+
+            .footer-copyright {
+                font-size: 0.9em;
             }
 
             .popup-content {
@@ -471,7 +493,10 @@
             <span class="status-dot"></span>
             Ready for document
         </span>
-        <span>© 2026 ShikshaFlow | Designed by Amrit</span>
+        <div class="footer-copyright">
+            <span class="footer-icon">©</span>
+            <span><strong>ShikshaFlow 2026</strong> | Designed by Amrit</span>
+        </div>
     </footer>
 </div>
 
@@ -491,16 +516,24 @@
     const pdfViewer = document.getElementById('pdfViewer');
     const pdfContainer = document.getElementById('pdf-viewer-container');
     const docTitleDisplay = document.getElementById('doc-title-display');
+    const docStatus = document.getElementById('doc-status');
+    const loadTime = document.getElementById('load-time');
     const loadStatus = document.getElementById('load-status');
+    let loadStartTime;
 
     function loadPDF() {
+        loadStartTime = Date.now();
         const urlParams = new URLSearchParams(window.location.search);
         const file = urlParams.get('file');
 
         if (!file) {
             pdfContainer.innerHTML = "<div style='display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;padding:50px;color:#dc2626;'><div style='font-size:64px;margin-bottom:20px;'>❌</div><h3 style='font-family:Crimson Pro,serif;font-size:1.5em;margin-bottom:10px;'>Error: No PDF file specified</h3><p style='color:#64748b;'>Please provide a file parameter in the URL.</p></div>";
             docTitleDisplay.textContent = 'N/A';
-            loadStatus.innerHTML = '<span class="status-dot" style="background:#dc2626;"></span>Configuration Error';
+            docStatus.textContent = 'Error';
+            docStatus.style.background = 'rgba(220, 38, 38, 0.1)';
+            docStatus.style.color = '#dc2626';
+            loadTime.textContent = '--';
+            loadStatus.innerHTML = '<span class="status-dot" style="background:#dc2626;box-shadow:0 0 10px #dc2626;"></span>Configuration Error';
             return;
         }
 
@@ -508,14 +541,26 @@
         docTitleDisplay.textContent = fileName.length > 35 ? fileName.substring(0, 32) + '...' : fileName;
 
         pdfViewer.src = file;
-        loadStatus.innerHTML = '<span class="status-dot" style="background:#f59e0b;"></span>Loading Document...';
+        docStatus.textContent = 'Loading...';
+        docStatus.style.background = 'rgba(245, 158, 11, 0.1)';
+        docStatus.style.color = '#f59e0b';
+        loadStatus.innerHTML = '<span class="status-dot" style="background:#f59e0b;box-shadow:0 0 10px #f59e0b;"></span>Loading Document...';
 
         pdfViewer.onload = () => {
-            loadStatus.innerHTML = '<span class="status-dot" style="background:#10b981;"></span>Document Loaded Successfully';
+            const loadDuration = ((Date.now() - loadStartTime) / 1000).toFixed(2);
+            docStatus.textContent = 'Ready';
+            docStatus.style.background = 'rgba(16, 185, 129, 0.1)';
+            docStatus.style.color = '#10b981';
+            loadTime.textContent = loadDuration + 's';
+            loadStatus.innerHTML = '<span class="status-dot" style="background:#10b981;box-shadow:0 0 10px #10b981;"></span>Document Loaded Successfully';
         };
         
         pdfViewer.onerror = () => {
-            loadStatus.innerHTML = '<span class="status-dot" style="background:#dc2626;"></span>Error: Failed to load document';
+            docStatus.textContent = 'Failed';
+            docStatus.style.background = 'rgba(220, 38, 38, 0.1)';
+            docStatus.style.color = '#dc2626';
+            loadTime.textContent = '--';
+            loadStatus.innerHTML = '<span class="status-dot" style="background:#dc2626;box-shadow:0 0 10px #dc2626;"></span>Error: Failed to load';
             pdfContainer.innerHTML = "<div style='display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;padding:50px;color:#dc2626;'><div style='font-size:64px;margin-bottom:20px;'>⚠️</div><h3 style='font-family:Crimson Pro,serif;font-size:1.5em;margin-bottom:10px;'>Could not embed document</h3><p style='color:#64748b;margin-bottom:20px;'>The document failed to load in the viewer.</p><a href='" + file + "' target='_blank' style='background:linear-gradient(135deg,#2563eb 0%,#1e40af 100%);color:white;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:600;'>Open in New Tab</a></div>";
         };
     }

@@ -4,127 +4,194 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShikshaFlow Document Viewer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
             --secondary: #f59e0b;
             --accent: #ec4899;
-            --bg-main: #fafbfc;
-            --bg-card: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border: #e2e8f0;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.12);
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            
+            --bg-main: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --bg-elevated: #334155;
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            
+            --border: #334155;
+            --border-light: #475569;
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
         }
 
-        * {
+        /* --- General Reset and Typography --- */
+        body, html {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body, html {
             height: 100%;
-            font-family: 'Work Sans', sans-serif;
-            background: linear-gradient(135deg, #fafbfc 0%, #f1f5f9 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-main);
             color: var(--text-primary);
-            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
+        /* Background gradient animation */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 90%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+            animation: gradientShift 20s ease infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(5%, -5%) rotate(120deg); }
+            66% { transform: translate(-5%, 5%) rotate(240deg); }
+        }
+
+        /* --- Grid Layout Container (Default/Desktop) --- */
         #app-layout {
             height: 100vh;
             display: grid;
-            grid-template-rows: auto 1fr auto;
-            grid-template-columns: 320px 1fr;
+            grid-template-rows: 72px 1fr 56px; 
+            grid-template-columns: 340px 1fr;
             grid-template-areas: 
                 "header header"
                 "sidebar main-viewer"
                 "footer footer";
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            position: relative;
+            z-index: 1;
         }
 
         /* Header Styling */
         header {
             grid-area: header;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 0 40px;
-            height: 75px;
-            box-shadow: var(--shadow-md);
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: relative;
-            overflow: hidden;
-            animation: slideDown 0.5s ease-out;
+            animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes slideDown {
-            from { transform: translateY(-100%); }
-            to { transform: translateY(0); }
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        header::before {
+        header::after {
             content: '';
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-            animation: shimmer 3s infinite;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--primary) 20%, 
+                var(--accent) 50%, 
+                var(--secondary) 80%, 
+                transparent 100%);
+            opacity: 0.6;
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        header h1 {
-            font-family: 'Crimson Pro', serif;
-            font-size: 1.8em;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            position: relative;
-            z-index: 1;
+        .header-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
         }
 
         .logo-icon {
-            width: 42px;
-            height: 42px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 28px;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
+            animation: logoShine 3s infinite;
+        }
+
+        @keyframes logoShine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(30deg); }
+        }
+
+        .brand-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .brand-text p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin: 2px 0 0 0;
         }
 
         /* Sidebar Styling */
         #sidebar {
             grid-area: sidebar;
-            background: var(--bg-card);
-            padding: 20px;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 24px;
             border-right: 1px solid var(--border);
             overflow-y: auto;
-            box-shadow: var(--shadow-sm);
-            animation: slideRight 0.6s ease-out 0.2s backwards;
-            display: flex;
-            flex-direction: column;
+            animation: slideRight 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
         }
 
         @keyframes slideRight {
@@ -133,12 +200,12 @@
         }
 
         .sidebar-module {
-            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 0;
+            background: rgba(51, 65, 85, 0.4);
             border: 1px solid var(--border);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
@@ -150,25 +217,32 @@
             left: 0;
             width: 4px;
             height: 100%;
-            background: linear-gradient(180deg, var(--secondary) 0%, var(--accent) 100%);
-            transition: width 0.3s ease;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+            transition: all 0.3s ease;
+            opacity: 0;
         }
 
         .sidebar-module:hover {
+            background: rgba(51, 65, 85, 0.6);
+            border-color: var(--border-light);
             transform: translateX(4px);
-            box-shadow: var(--shadow-md);
         }
 
         .sidebar-module:hover::before {
-            width: 6px;
+            opacity: 1;
+        }
+
+        .sidebar-module:last-child {
+            margin-bottom: 0;
         }
 
         .sidebar-module h3 {
             color: var(--text-primary);
-            font-family: 'Crimson Pro', serif;
-            font-size: 1em;
-            margin-bottom: 10px;
-            font-weight: 700;
+            font-size: 0.875rem;
+            margin: 0 0 12px 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -182,50 +256,49 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 14px;
         }
 
         #doc-title-display {
-            font-weight: 600;
+            font-weight: 500;
             color: var(--text-primary);
-            font-size: 0.85em;
-            line-height: 1.4;
-            padding: 8px;
-            background: rgba(37, 99, 235, 0.05);
-            border-radius: 6px;
-            border-left: 3px solid var(--primary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            padding: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: var(--radius-md);
             word-wrap: break-word;
         }
 
         /* Main Viewer Styling */
         #main-viewer {
             grid-area: main-viewer;
-            padding: 30px;
+            padding: 28px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            animation: fadeInUp 0.7s ease-out 0.3s backwards;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
         }
 
         @keyframes fadeInUp {
-            from { transform: translateY(30px); opacity: 0; }
+            from { transform: translateY(40px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
         #pdf-viewer-container {
             flex-grow: 1;
-            box-shadow: var(--shadow-lg);
-            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            border-radius: var(--radius-xl);
             overflow: hidden;
-            background: var(--bg-card);
+            background: white;
             border: 1px solid var(--border);
             position: relative;
-            transition: all 0.3s ease;
+            transition: box-shadow 0.3s ease;
         }
 
         #pdf-viewer-container:hover {
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
+            box-shadow: 0 24px 38px -8px rgba(0, 0, 0, 0.5), var(--shadow-glow);
         }
 
         #pdfViewer {
@@ -237,19 +310,23 @@
         /* Footer Styling */
         footer {
             grid-area: footer;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: rgba(255, 255, 255, 0.95);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-top: 1px solid rgba(99, 102, 241, 0.2);
             padding: 0 40px;
-            height: 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.85em;
-            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.5s ease-out 0.4s backwards;
-            border-top: 2px solid rgba(245, 158, 11, 0.3);
+            font-size: 0.875rem;
+            font-weight: 400;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s backwards;
             position: relative;
-            overflow: hidden;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         footer::before {
@@ -258,129 +335,69 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--secondary) 0%, var(--accent) 50%, var(--primary) 100%);
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(99, 102, 241, 0.5) 50%, 
+                transparent 100%);
         }
 
         .footer-left {
             display: flex;
             align-items: center;
             gap: 20px;
-            flex: 1;
-        }
-
-        #load-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 14px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            font-weight: 500;
-            transition: all 0.3s ease;
-            font-size: 0.95em;
-        }
-
-        #load-status:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background: var(--secondary);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-            box-shadow: 0 0 10px var(--secondary);
-            position: relative;
-        }
-
-        .status-dot::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: inherit;
-            animation: ripple 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.95); }
-        }
-
-        @keyframes ripple {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(2.5); opacity: 0; }
-        }
-
-        .footer-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
         }
 
         .footer-copyright {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-secondary);
         }
 
-        .copyright-badge {
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
-            border-radius: 10px;
+        .footer-copyright span {
+            color: var(--text-muted);
+        }
+
+        .footer-right {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 700;
-            color: white;
-            box-shadow: 0 3px 12px rgba(245, 158, 11, 0.4);
-            flex-shrink: 0;
+            gap: 16px;
         }
 
-        .copyright-info {
+        #load-status {
             display: flex;
-            flex-direction: column;
-            gap: 2px;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: rgba(51, 65, 85, 0.5);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+            font-size: 0.8rem;
         }
 
-        .copyright-info strong {
-            color: white;
-            font-size: 0.95em;
-            font-weight: 600;
-            letter-spacing: 0.3px;
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--warning);
+            box-shadow: 0 0 12px currentColor;
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        .copyright-info span {
-            color: rgba(255, 255, 255, 0.65);
-            font-size: 0.8em;
+        .status-dot.success {
+            background: var(--success);
         }
 
-        .footer-year {
-            padding: 6px 12px;
-            background: rgba(37, 99, 235, 0.15);
-            border-radius: 6px;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 600;
-            font-size: 0.9em;
-            border: 1px solid rgba(37, 99, 235, 0.3);
+        .status-dot.error {
+            background: var(--danger);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.9); }
         }
 
         /* Popup Styling */
@@ -390,8 +407,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -399,23 +417,28 @@
             animation: fadeIn 0.3s ease-out;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .popup-content {
             background: var(--bg-card);
-            padding: 40px 35px;
-            width: 90%;
-            max-width: 480px;
-            border-radius: 24px;
-            text-align: center;
-            box-shadow: var(--shadow-lg);
             border: 1px solid var(--border);
-            animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            padding: 48px 40px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: var(--radius-xl);
+            text-align: center;
+            box-shadow: var(--shadow-xl), var(--shadow-glow);
+            animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             position: relative;
             overflow: hidden;
         }
 
         @keyframes popIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from { transform: scale(0.8) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
         }
 
         .popup-content::before {
@@ -424,105 +447,135 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 50%, var(--secondary) 100%);
+        }
+
+        .popup-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+            animation: iconBounce 0.6s ease-out 0.3s;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .popup-content h3 {
-            margin: 0 0 20px;
-            color: var(--primary);
-            font-family: 'Crimson Pro', serif;
-            font-size: 1.8em;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
             font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 16px 0;
         }
 
         .popup-content p {
             color: var(--text-secondary);
-            font-size: 1.05em;
+            font-size: 1rem;
             line-height: 1.7;
-            margin-bottom: 25px;
-        }
-
-        .popup-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
+            margin-bottom: 32px;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            padding: 14px 32px;
-            margin-top: 10px;
-            border-radius: 12px;
+            padding: 14px 36px;
+            border-radius: var(--radius-md);
             cursor: pointer;
-            font-size: 1em;
+            font-size: 1rem;
             font-weight: 600;
-            font-family: 'Work Sans', sans-serif;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 24px rgba(99, 102, 241, 0.5);
         }
 
         .btn-primary:active {
-            transform: translateY(0);
+            transform: translateY(-1px);
         }
 
         /* Scrollbar Styling */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
+            height: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #f1f5f9;
+            background: rgba(51, 65, 85, 0.3);
+            border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
-            border-radius: 5px;
+            border-radius: 4px;
+            transition: background 0.3s ease;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
+            background: var(--primary-light);
         }
 
-        /* Responsive Design */
+        /* --- Responsive Fixes for Mobile (Stack Layout) --- */
         @media (max-width: 768px) {
-            #app-layout {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto 1fr auto;
-                grid-template-areas:
-                    "header"
-                    "sidebar"
-                    "main-viewer"
-                    "footer";
+            #app-layout { 
+                grid-template-columns: 1fr; 
+                grid-template-rows: 64px auto 1fr 56px; 
+                grid-template-areas: "header" "sidebar" "main-viewer" "footer"; 
             }
 
             header {
                 padding: 0 20px;
-                height: 65px;
             }
 
-            header h1 {
-                font-size: 1.3em;
+            .brand-text h1 {
+                font-size: 1.25rem;
+            }
+
+            .brand-text p {
+                font-size: 0.65rem;
             }
 
             .logo-icon {
-                width: 36px;
-                height: 36px;
-                font-size: 20px;
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
             }
 
             #sidebar {
-                border-right: none;
+                border-right: none; 
                 border-bottom: 1px solid var(--border);
-                padding: 20px;
-                max-height: none;
-                overflow-y: visible;
+                padding: 16px; 
+                max-height: 250px; 
+                overflow-y: auto; 
             }
 
             .sidebar-module {
@@ -531,44 +584,61 @@
             }
 
             #main-viewer {
-                padding: 15px;
+                padding: 16px; 
+                overflow-y: auto; 
             }
 
             #pdf-viewer-container {
-                border-radius: 16px;
+                height: 100%;
+                border-radius: var(--radius-lg);
             }
 
             footer {
-                padding: 0 20px;
-                height: auto;
-                min-height: 65px;
-                font-size: 0.8em;
+                padding: 14px 20px;
                 flex-direction: column;
-                gap: 12px;
-                padding: 15px 20px;
+                gap: 10px;
             }
 
-            .footer-left, .footer-right {
+            .footer-left,
+            .footer-right {
                 width: 100%;
                 justify-content: center;
             }
 
-            .footer-right {
-                gap: 15px;
-            }
-
-            .copyright-badge {
-                width: 38px;
-                height: 38px;
-                font-size: 18px;
-            }
-
-            .copyright-info strong {
-                font-size: 0.95em;
+            .footer-copyright {
+                font-size: 0.75rem;
+                text-align: center;
             }
 
             .popup-content {
-                padding: 30px 25px;
+                padding: 36px 28px;
+                width: 95%;
+            }
+
+            .popup-content h3 {
+                font-size: 1.5rem;
+            }
+
+            .popup-icon {
+                font-size: 52px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-text h1 {
+                font-size: 1.1rem;
+            }
+
+            .sidebar-module {
+                padding: 14px;
+            }
+
+            footer {
+                font-size: 0.75rem;
+            }
+
+            .popup-content {
+                padding: 32px 24px;
             }
         }
     </style>
@@ -576,20 +646,17 @@
 <body>
 <div id="app-layout">
     <header>
-        <h1>
-            <span class="logo-icon">📘</span>
-            ShikshaFlow Document Viewer
-        </h1>
+        <div class="header-brand">
+            <div class="logo-icon">📚</div>
+            <div class="brand-text">
+                <h1>ShikshaFlow</h1>
+                <p>Document Viewer</p>
+            </div>
+        </div>
     </header>
 
     <div id="sidebar">
-        <div class="sidebar-module">
-            <h3>
-                <span class="icon-badge">📄</span>
-                Document Info
-            </h3>
-            <p id="doc-title-display">Loading Document...</p>
-        </div>
+        <!-- Sidebar removed -->
     </div>
 
     <div id="main-viewer">
@@ -601,65 +668,68 @@
     <footer>
         <div class="footer-left">
             <div class="footer-copyright">
-                <div class="copyright-badge">©</div>
-                <div class="copyright-info">
-                    <strong>ShikshaFlow</strong>
-                    <span>Designed by Amrit</span>
-                </div>
+                © 2026 ShikshaFlow <span>· Designed by Amrit</span>
             </div>
-            <div class="footer-year">2026</div>
         </div>
         <div class="footer-right">
             <span id="load-status">
                 <span class="status-dot"></span>
-                Ready for document
+                <span id="status-text">Ready</span>
             </span>
         </div>
     </footer>
 </div>
 
+<!-- Popup -->
 <div id="viewOnlyPopup">
     <div class="popup-content">
-        <div class="popup-icon">🔒</div>
-        <h3>Important Notice</h3>
+        <div class="popup-icon">🔐</div>
+        <h3>Security Notice</h3>
         <p>
-            Documents are only available for viewing.<br>
-            Downloading, printing, or copying is not allowed.
+            This document is protected and available for viewing only.<br>
+            Download, print, and copy functions are disabled.
         </p>
-        <button class="btn-primary" onclick="closePopup()">Got it</button>
+        <button class="btn-primary" onclick="closePopup()">
+            <span style="position: relative; z-index: 1;">I Understand</span>
+        </button>
     </div>
 </div>
 
 <script>
     const pdfViewer = document.getElementById('pdfViewer');
     const pdfContainer = document.getElementById('pdf-viewer-container');
-    const docTitleDisplay = document.getElementById('doc-title-display');
     const loadStatus = document.getElementById('load-status');
+    const statusText = document.getElementById('status-text');
+    const statusDot = loadStatus.querySelector('.status-dot');
+
+    function updateStatus(text, type = 'default') {
+        statusText.textContent = text;
+        statusDot.className = 'status-dot';
+        
+        if (type === 'success') {
+            statusDot.classList.add('success');
+        } else if (type === 'error') {
+            statusDot.classList.add('error');
+        }
+    }
 
     function loadPDF() {
         const urlParams = new URLSearchParams(window.location.search);
         const file = urlParams.get('file');
 
         if (!file) {
-            pdfContainer.innerHTML = "<div style='display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;padding:50px;color:#dc2626;'><div style='font-size:64px;margin-bottom:20px;'>❌</div><h3 style='font-family:Crimson Pro,serif;font-size:1.5em;margin-bottom:10px;'>Error: No PDF file specified</h3><p style='color:#64748b;'>Please provide a file parameter in the URL.</p></div>";
-            docTitleDisplay.textContent = 'N/A';
-            loadStatus.innerHTML = '<span class="status-dot" style="background:#dc2626;box-shadow:0 0 10px #dc2626;"></span>Configuration Error';
+            pdfContainer.innerHTML = "<h3 style='text-align:center; padding:50px; color:#ef4444;'>❌ Error: No PDF file specified.</h3>";
+            updateStatus('Configuration Error', 'error');
             return;
         }
 
-        const fileName = file.substring(file.lastIndexOf('/') + 1) || file;
-        docTitleDisplay.textContent = fileName.length > 35 ? fileName.substring(0, 32) + '...' : fileName;
-
         pdfViewer.src = file;
-        loadStatus.innerHTML = '<span class="status-dot" style="background:#f59e0b;box-shadow:0 0 10px #f59e0b;"></span>Loading Document...';
-
-        pdfViewer.onload = () => {
-            loadStatus.innerHTML = '<span class="status-dot" style="background:#10b981;box-shadow:0 0 10px #10b981;"></span>Document Loaded Successfully';
-        };
+        updateStatus('Loading Document...', 'default');
         
+        pdfViewer.onload = () => updateStatus('Document Loaded', 'success');
         pdfViewer.onerror = () => {
-            loadStatus.innerHTML = '<span class="status-dot" style="background:#dc2626;box-shadow:0 0 10px #dc2626;"></span>Error: Failed to load';
-            pdfContainer.innerHTML = "<div style='display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;padding:50px;color:#dc2626;'><div style='font-size:64px;margin-bottom:20px;'>⚠️</div><h3 style='font-family:Crimson Pro,serif;font-size:1.5em;margin-bottom:10px;'>Could not embed document</h3><p style='color:#64748b;margin-bottom:20px;'>The document failed to load in the viewer.</p><a href='" + file + "' target='_blank' style='background:linear-gradient(135deg,#2563eb 0%,#1e40af 100%);color:white;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:600;'>Open in New Tab</a></div>";
+            updateStatus('Failed to Load', 'error');
+            pdfContainer.innerHTML = "<h3 style='text-align:center; padding:50px; color:#ef4444;'>❌ Error: Could not embed document. Try <a href='" + file + "' target='_blank' style='color:#6366f1;'>opening in a new tab</a>.</h3>";
         };
     }
 
@@ -671,7 +741,6 @@
         }, 200);
     }
 
-    // Load PDF on page load
     loadPDF();
 </script>
 </body>
